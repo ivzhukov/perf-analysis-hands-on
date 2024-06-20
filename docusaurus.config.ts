@@ -133,16 +133,16 @@ const config: Config = {
           title: 'Useful Links',
           items: [
             {
-              label: 'Agenda',
-              to: 'https://www.vi-hps.org/training/tws/tw45.html',
+              label: 'Introduction to Performance Engineering',
+              to: 'https://zenodo.org/doi/10.5281/zenodo.4475956',
             },
             {
-              label: 'TW45 info',
-              to: 'https://tinyurl.com/vihps-2024',
+              label: 'VI-HPS Trainings',
+              to: 'https://www.vi-hps.org/training/index.html',
             },
             {
-              label: 'VI-HPS',
-              href: 'https://www.vi-hps.org',
+              label: 'VI-HPS Tools Guide',
+              href: 'https://www.vi-hps.org/cms/upload/material/general/ToolsGuide.pdf',
             },
             {
               label: 'POP CoE',
