@@ -3,8 +3,8 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Performance Analysis',
-  tagline: 'Hands-On',
+  title: 'IHPCSS24',
+  tagline: 'Performance Analysis Hands-On',
   favicon: 'img/logo.ico',
 
   // Set the production url of your site here
