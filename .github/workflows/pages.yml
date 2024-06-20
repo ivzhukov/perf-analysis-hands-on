@@ -17,10 +17,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    defaults:
-       run:
-         working-directory: ./server/
   deploy:
     environment:
       name: github-pages
