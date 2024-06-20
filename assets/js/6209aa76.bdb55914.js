@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkperf_analysis=self.webpackChunkperf_analysis||[]).push([[2743],{7960:a=>{a.exports=JSON.parse('{"label":"facebook","permalink":"/perf-analysis-hands-on/blog/tags/facebook","allTagsPath":"/perf-analysis-hands-on/blog/tags","count":1,"unlisted":false}')}}]);
