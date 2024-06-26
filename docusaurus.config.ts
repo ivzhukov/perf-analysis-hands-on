@@ -134,11 +134,11 @@ const config: Config = {
           items: [
             {
               label: 'Introduction to Performance Engineering',
-              to: 'https://zenodo.org/doi/10.5281/zenodo.4475956',
+              href: 'https://zenodo.org/doi/10.5281/zenodo.4475956',
             },
             {
               label: 'VI-HPS Trainings',
-              to: 'https://www.vi-hps.org/training/index.html',
+              href: 'https://www.vi-hps.org/training/index.html',
             },
             {
               label: 'VI-HPS Tools Guide',

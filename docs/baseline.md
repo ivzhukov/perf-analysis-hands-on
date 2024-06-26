@@ -7,33 +7,33 @@ In this part we are going to build and run a specific benchmark to identify how 
 
 ## Initial setup
 
-First of all let's login into CoolMUC-2 using ssh:
+First of all let's login into Bridges-2 using ssh:
 
 ```bash
-$ ssh -Y userid@lxlogin1.lrz.de
+$ ssh -Y userid@bridges2.psc.edu
 ```
 The **-Y** option is necessary to enable X11 forwarding. X11 forwarding is a SSH protocol that enables users to run graphical applications on a remote server and interact with them using their local display and I/O devices.
 
 Now we need to create our own directory for the exercises:
 
 ```bash
-$ mkdir -p $HOME/tw45
+$ mkdir -p $HOME/ihpcss24
 ```
 The **-p** prevents error messages if the specified directories already exists.
 
 Then, we need to load required software, e.g. compiler, MPI, text editor:
 
 ```bash
-$ module load intel intel-mpi/2019-intel nano
+$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
 ```
 
 ## Build benchmark
 
 Start by copying the tutorial sources to your working directory:
 ```bash
-$ cd $HOME/tw45
-$ tar zxvf /lrz/sys/courses/vihps/2024/material/NPB3.3-MZ-MPI.tar.gz -C .
-$ cd $HOME/tw45/NPB3.3-MZ-MPI
+$ cd $HOME/ihpcss24
+$ tar zxvf /jet/home/zhukov/ihpcss24/tutorial/NPB3.3-MZ-MPI.tar.gz .
+$ cd $HOME/ihpcss24/NPB3.3-MZ-MPI
 ```
 
 For this tutorial we are going to use the NAS Parallel Benchmark suite (MPI+OpenMP version). It is available [here](http://www.nas.nasa.gov/Software/NPB), and includes three benchmarks written in Fortran77. You can configure the benchmark for various sizes and classes. This allows the benchmark to be used on a wide range of systems, from workstations to supercomputers.
@@ -108,42 +108,42 @@ Alternatively, you can just use ```make suite```.
 
 ```bash
 $ make bt-mz CLASS=C NPROCS=28
-    ===========================================
+   ===========================================
    =      NAS PARALLEL BENCHMARKS 3.3        =
    =      MPI+OpenMP Multi-Zone Versions     =
    =      F77                                =
    ===========================================
 
-cd BT-MZ; make CLASS=C NPROCS=28 VERSION=
-make[1]: Entering directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
-make[2]: Entering directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/sys'
+cd BT-MZ; make CLASS=C NPROCS=8 VERSION=
+make[1]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
-make[2]: Leaving directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/sys'
-../sys/setparams bt-mz 28 C
-make[2]: Entering directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
-mpif77 -c  -O3 -g -qopenmp	 bt.f
-mpif77 -c  -O3 -g -qopenmp	 initialize.f
-mpif77 -c  -O3 -g -qopenmp	 exact_solution.f
-mpif77 -c  -O3 -g -qopenmp	 exact_rhs.f
-mpif77 -c  -O3 -g -qopenmp	 set_constants.f
-mpif77 -c  -O3 -g -qopenmp	 adi.f
-mpif77 -c  -O3 -g -qopenmp	 rhs.f
-mpif77 -c  -O3 -g -qopenmp	 zone_setup.f
-mpif77 -c  -O3 -g -qopenmp	 x_solve.f
-mpif77 -c  -O3 -g -qopenmp	 y_solve.f
-mpif77 -c  -O3 -g -qopenmp	 exch_qbc.f
-mpif77 -c  -O3 -g -qopenmp	 solve_subs.f
-mpif77 -c  -O3 -g -qopenmp	 z_solve.f
-mpif77 -c  -O3 -g -qopenmp	 add.f
-mpif77 -c  -O3 -g -qopenmp	 error.f
-mpif77 -c  -O3 -g -qopenmp	 verify.f
-mpif77 -c  -O3 -g -qopenmp	 mpi_setup.f
-cd ../common; mpif77 -c  -O3 -g -qopenmp	 print_results.f
-cd ../common; mpif77 -c  -O3 -g -qopenmp	 timers.f
-mpif77 -O3 -g -qopenmp	 -o ../bin/bt-mz_C.28 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
-make[2]: Leaving directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
-Built executable ../bin/bt-mz_C.28
-make[1]: Leaving directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/sys'
+../sys/setparams bt-mz 8 C
+make[2]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  bt.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  initialize.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exact_solution.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exact_rhs.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  set_constants.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  adi.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  rhs.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  zone_setup.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  x_solve.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  y_solve.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exch_qbc.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  solve_subs.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  z_solve.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  add.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  error.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  verify.f
+mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  mpi_setup.f
+cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  print_results.f
+cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  timers.f
+mpif77 -O3 -fopenmp	 -fallow-argument-mismatch  -o ../bin/bt-mz_C.8 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+Built executable ../bin/bt-mz_C.8
+make[1]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
 ```
 If compilation succeeds, you can find in the ```bin``` directory.
 
@@ -151,70 +151,75 @@ If compilation succeeds, you can find in the ```bin``` directory.
 Lets go to the ```bin``` directory, copy a prepared batch script and examine what it does:
 ```bash
 $ cd bin
-$ cp ../jobscript/coolmuc2/reference.sbatch .
+$ cp ../jobscript/bridges2/reference.sbatch .
 $ nano reference.sbatch
 ```
 Here is what you should see in your batch script:
 ```bash
 #!/bin/bash
-#SBATCH -o bt-mz.%j.out
-#SBATCH -e bt-mz.%j.err
-#SBATCH -J bt-mz
-#SBATCH --clusters=cm2_tiny
-#SBATCH --partition=cm2_tiny
-#SBATCH --reservation=hhps1s24
-#SBATCH --nodes=2
-#SBATCH --ntasks=28
-#SBATCH --ntasks-per-node=14
-#SBATCH --get-user-env
-#SBATCH --time=00:05:00
+#SBATCH -J mzmpibt           # job name
+#SBATCH -o ref-C.8-%j.out    # stdout output file
+#SBATCH -e ref-C.8-%j.err    # stderr output file
+#SBATCH --nodes=2            # requested nodes
+#SBATCH --ntasks=8           # requested MPI tasks
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=6    # requested logical CPUs/threads per task
+#SBATCH --partition RM       # partition to use
+#SBATCH --account=tra210016p # account to charge
+#SBATCH --export=ALL         # export env varibales
+#SBATCH --time=00:10:00      # max wallclock time (hh:mm:ss)
+#SBATCH --reservation=
 
-export OMP_NUM_THREADS=4
+# setup modules, add tools to PATH
+set -x
+module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
 
-# Benchmark configuration (disable load balancing with threads)
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+# benchmark configuration
 export NPB_MZ_BLOAD=0
-PROCS=28
 CLASS=C
+PROCS=$SLURM_NTASKS
+EXE=./bt-mz_$CLASS.$PROCS
 
-# Run the application
-mpiexec -n $SLURM_NTASKS ./bt-mz_$CLASS.$PROCS
+mpirun -n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK $EXE
 ```
 To exit text editor you can use ```Ctrl+X```
 
-On CoolMUC-2 we are going to use:
-* 2 standard compute nodes with 2x Intel Haswell 14-Core Processor each (28 cores / 56 threads)
-* 56GB RAM per node
-* 14 MPI ranks per node and 4 OpenMP threads per MPI rank
+On Bridges-2 we are going to use RM partition:
+* 2 standard compute nodes with 2 x AMD EPYC 7742 CPUs, 64 cores per CPU, 128 cores per node
+* 250GB RAM per node
+* Our application will use 8 MPI ranks in total, 4 MPI ranks per node and 6 OpenMP threads per MPI rank
 
 Now we are ready to submit our batch script:
 ```bash
-$ sbatch reference.sbatch
+$ sbatch reference.sbatch.C.8
 ```
 
 :::info
 
 To submit the job use ```sbatch <script you want to submit>```.
 
-To check status of all your jobs use ```squeue -M cm2_tiny --me```.
+To check status of all your jobs use ```squeue --me```.
 
-To cancel specific job use ```scancel -M cm2_tiny <jobid you want to cancel>```.
+To cancel specific job use ```scancel <jobid you want to cancel>```.
 
 :::
 
-Once the job has finished you will see two files in your directory, one with standard output ```bt-mz.<jobid>.out``` and one with standard error output ```bt-mz.<jobid>.err```. The former one should include all output provided by your application and the latter one only system specific output. Let's examine standard output file:
+Once the job has finished you will see two files in your directory, one with standard output ```ref-C.8-<jobid>.out``` and one with standard error output ```ref-C.8-<jobid>.err```. The former one should include all output provided by your application and the latter one only system specific output. Let's examine standard output file:
 
  ```
- $ cat bt-mz.<jobid>.out
+ $ cat ref-C.8-<jobid>.out
  NAS Parallel Benchmarks (NPB3.3-MZ-MPI) - BT-MZ MPI+OpenMP Benchmark
 
  Number of zones:  16 x  16
  Iterations: 200    dt:   0.000100
- Number of active processes:    28
+ Number of active processes:     8
 
  Use the default load factors with threads
- Total number of threads:    112  (  4.0 threads/process)
+ Total number of threads:     48  (  6.0 threads/process)
 
- Calculated speedup =    110.34
+ Calculated speedup =     47.97
 
  Time step    1
  Time step   20
@@ -231,16 +236,16 @@ Once the job has finished you will see two files in your directory, one with sta
  accuracy setting for epsilon =  0.1000000000000E-07
  Comparison of RMS-norms of residual
            1 0.3457703287806E+07 0.3457703287806E+07 0.1092202750127E-12
-           2 0.3213621375929E+06 0.3213621375929E+06 0.1320422658492E-12
+           2 0.3213621375929E+06 0.3213621375929E+06 0.1322233937859E-12
            3 0.7002579656870E+06 0.7002579656870E+06 0.1496217033982E-13
-           4 0.4517459627471E+06 0.4517459627471E+06 0.2280652586031E-13
+           4 0.4517459627471E+06 0.4517459627471E+06 0.2254882500313E-13
            5 0.2818715870791E+07 0.2818715870791E+07 0.1486830094937E-14
  Comparison of RMS-norms of solution error
-           1 0.2059106993570E+06 0.2059106993570E+06 0.1540627820550E-12
+           1 0.2059106993570E+06 0.2059106993570E+06 0.1539214400532E-12
            2 0.1680761129461E+05 0.1680761129461E+05 0.2132015705369E-12
            3 0.4080731640795E+05 0.4080731640795E+05 0.3084595553087E-13
            4 0.2836541076778E+05 0.2836541076778E+05 0.1026032398931E-12
-           5 0.2136807610771E+06 0.2136807610771E+06 0.2335870996607E-12
+           5 0.2136807610771E+06 0.2136807610771E+06 0.2334508972703E-12
  Verification Successful
 
 
@@ -248,15 +253,15 @@ Once the job has finished you will see two files in your directory, one with sta
  Class           =                        C
  Size            =            480x  320x 28
  Iterations      =                      200
- Time in seconds =                    13.91
- Total processes =                       28
- Total threads   =                      112
- Mop/s total     =                174439.35
- Mop/s/thread    =                  1557.49
+ Time in seconds =                    14.35
+ Total processes =                        8
+ Total threads   =                       48
+ Mop/s total     =                169157.12
+ Mop/s/thread    =                  3524.11
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1
- Compile date    =              04 Jun 2024
+ Compile date    =              26 Jun 2024
  ```
 
 The most important metric in the output is "Time in seconds" which indicates how much time the application spent executing 200 iterations (pre and post. processing are excluded from the time measurement). Further, "Validation" is important as it indicates if the computation completed successfully (e.g. converged). Please write down the time value you received, as we are going to refer to its value in the next section.
