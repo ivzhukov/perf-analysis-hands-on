@@ -107,7 +107,7 @@ To build application the following parameters need to be specified:
 Alternatively, you can just use ```make suite```.
 
 ```bash
-$ make bt-mz CLASS=C NPROCS=28
+$ make bt-mz CLASS=C NPROCS=8
    ===========================================
    =      NAS PARALLEL BENCHMARKS 3.3        =
    =      MPI+OpenMP Multi-Zone Versions     =
