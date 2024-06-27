@@ -101,7 +101,7 @@ $ make
 
 To build application the following parameters need to be specified:
 * The benchmark configuration benchmark name (bt-mz, lu-mz, sp-mz): ```bt-mz```
-* The number of MPI processes: ```NPROCS=28```
+* The number of MPI processes: ```NPROCS=8```
 * The benchmark class (S, W, A, B, C, D, E): ```CLASS=C```
 
 Alternatively, you can just use ```make suite```.

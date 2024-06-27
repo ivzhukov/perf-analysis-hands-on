@@ -10,17 +10,17 @@ sidebar_position: 2
  To use Score-P, we first need to make sure that all required software is available:
 ```bash
 $ # Reload modules if needed
-$ module load intel intel-mpi/2019-intel nano
+$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
 $ # Load additional software being used in the following steps
-$ module use /lrz/sys/courses/vihps/2024/modulefiles/
-$ module load scorep/8.4-intel-intelmpi scalasca/2.6.1-intel-intelmpi
+$ module use /jet/home/zhukov/ihpcss24/modules/
+$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
 ```
 
 We loaded Scalasca trace tools at this stage as well to use convenience commands that allow to control execution measurement collection and analysis, and analysis report postprocessing. This is not necessary but highly recommended step to do.
 
 Go to our work directory
 ```bash
-$ cd $HOME/tw45/NPB3.3-MZ-MPI
+$ cd $HOME/ihpcss24//NPB3.3-MZ-MPI
 ```
 
 Edit `config/make.def` to adjust build (see highlighted lines)
@@ -35,8 +35,8 @@ Edit `config/make.def` to adjust build (see highlighted lines)
 #---------------------------------------------------------------------------
 # Configured for generic MPI with GCC compiler
 #---------------------------------------------------------------------------
-#OPENMP = -fopenmp      # GCC compiler
-OPENMP  = -qopenmp      # Intel compiler
+OPENMP = -fopenmp      # GCC compiler
+#OPENMP  = -qopenmp      # Intel compiler
 
 #---------------------------------------------------------------------------
 # Parallel Fortran:
@@ -78,7 +78,8 @@ FLINK   = $(MPIF77)
 #---------------------------------------------------------------------------
 # Global *compile time* flags for Fortran programs
 #---------------------------------------------------------------------------
-FFLAGS  = -O3 -g $(OPENMP)
+FFLAGS  = -O3 $(OPENMP) -fallow-argument-mismatch # GCC
+#FFLAGS  = -O3 $(OPENMP) # Intel
 
 #---------------------------------------------------------------------------
 # These macros are passed to the compiler
@@ -100,7 +101,24 @@ FLINKFLAGS = $(FFLAGS)
 #---------------------------------------------------------------------------
 # Utilities C:
 #
-                                                                                                                                    41,0-1        58%
+# This is the C compiler used to compile C utilities.  Flags required by
+# this compiler go here also; typically there are few flags required; hence
+# there are no separate macros provided for such flags.
+#---------------------------------------------------------------------------
+UCC     = cc
+
+
+#---------------------------------------------------------------------------
+# Destination of executables, relative to subdirs of the main directory.
+#---------------------------------------------------------------------------
+include ../sys/make.build
+BINDIR  = ../bin${BUILD}
+
+
+#---------------------------------------------------------------------------
+# The variable RAND controls which random number generator
+# is used. It is described in detail in README.install.
+# Use "randi8" unless there is a reason to use another one.
 # Other allowed values are "randi8_safe", "randdp" and "randdpvec"
 #---------------------------------------------------------------------------
 RAND   = randi8
@@ -124,13 +142,13 @@ The `scorep` instrumenter must be used with the link command to ensure that all 
 
 Lets return to our root directory and clean-up:
 ```bash
-$ cd $HOME/tw45/NPB3.3-MZ-MPI/
+$ cd $HOME/ihpcss24/NPB3.3-MZ-MPI/
 $ make clean
 ```
 
 Next, we build the instrumented version of BT-MZ:
 ```bash
-$ make bt-mz CLASS=C NPROCS=28
+$ make bt-mz CLASS=C NPROCS=8
    ===========================================
    =      NAS PARALLEL BENCHMARKS 3.3        =
    =      MPI+OpenMP Multi-Zone Versions     =
@@ -138,12 +156,12 @@ $ make bt-mz CLASS=C NPROCS=28
    ===========================================
 
 cd BT-MZ; make CLASS=C NPROCS=28 VERSION=
-make[1]: Entering directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
-make[2]: Entering directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/sys'
+make[1]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
-make[2]: Leaving directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/sys'
-../sys/setparams bt-mz 28 C
-make[2]: Entering directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/sys'
+../sys/setparams bt-mz 8 C
+make[2]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
 scorep --user  mpif77 -c  -O3 -g -qopenmp	 bt.f
 scorep --user  mpif77 -c  -O3 -g -qopenmp	 initialize.f
 scorep --user  mpif77 -c  -O3 -g -qopenmp	 exact_solution.f
@@ -164,49 +182,53 @@ scorep --user  mpif77 -c  -O3 -g -qopenmp	 mpi_setup.f
 cd ../common; scorep --user  mpif77 -c  -O3 -g -qopenmp	 print_results.f
 cd ../common; scorep --user  mpif77 -c  -O3 -g -qopenmp	 timers.f
 scorep --user  mpif77 -O3 -g -qopenmp	 -o ../bin.scorep/bt-mz_C.28 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o 
-make[2]: Leaving directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
-Built executable ../bin.scorep/bt-mz_C.28
-make[1]: Leaving directory '/dss/dsshome1/0C/hpckurs11/tw45/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+Built executable ../bin.scorep/bt-mz_C.8
+make[1]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
 ```
 As you might noticed now `scorep` stands before each compilation and linking command. This time executable was created in `bin.scorep` directory that allow us not to mess up with our baseline experiments.
 
 Let's go to the directory where our new executable lies and copy batch script
 ```bash
 $ cd bin.scorep
-$ cp ../jobscript/coolmuc2/scorep.sbatch .
+$ cp ../jobscript/bridges2/scorep.sbatch.C.8 .
 ```
 
-Let's examine what `scorep.sbatch` does by executing `nano scorep.batch`
+Let's examine what `scorep.sbatch.C.8` does by executing `nano scorep.batch`
 ```bash showLineNumbers
 #!/bin/bash
-#SBATCH -o bt-mz.%j.out
-#SBATCH -e bt-mz.%j.err
-#SBATCH -J bt-mz
-#SBATCH --clusters=cm2_tiny
-#SBATCH --partition=cm2_tiny
-#SBATCH --reservation=hhps1s24
-#SBATCH --nodes=2
-#SBATCH --ntasks=28
-#SBATCH --ntasks-per-node=14
-#SBATCH --get-user-env
-#SBATCH --time=00:05:00
+#SBATCH -J mzmpibt             # job name
+#SBATCH -o profile-C.8-%j.out  # stdout output file
+#SBATCH -e profile-C.8-%j.err  # stderr output file
+#SBATCH --nodes=2              # requested nodes
+#SBATCH --ntasks=8             # requested MPI tasks
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=6      # requested logical CPUs/threads per task
+#SBATCH --partition RM         # partition to use
+#SBATCH --account=tra210016p   # account to charge
+#SBATCH --export=ALL           # export env varibales
+#SBATCH --time=00:10:00        # max wallclock time (hh:mm:ss)
+##SBATCH --reservation=ihpcssday3RM10
 
-module use /lrz/sys/courses/vihps/2024/modulefiles/
-module load scorep/8.4-intel-intelmpi
-export OMP_NUM_THREADS=4
+# setup modules, add tools to PATH
+set -x
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+module use /jet/home/zhukov/ihpcss24/modules/
+module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scalasca/2.6-gcc_openmpi
+
+# benchmark configuration
+export NPB_MZ_BLOAD=0
+CLASS=C
+PROCS=$SLURM_NTASKS
+EXE=./bt-mz_$CLASS.$PROCS
 
 # Score-P measurement configuration
 # highlight-next-line
-export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_sum
+export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_${CLASS}_${PROCS}x${OMP_NUM_THREADS}_sum
 #export SCOREP_FILTERING_FILE=../config/scorep.filt
 
-# Benchmark configuration (disable load balancing with threads)
-export NPB_MZ_BLOAD=0
-PROCS=28
-CLASS=C
-
-# Run the application
-mpiexec -n $SLURM_NTASKS ./bt-mz_$CLASS.$PROCS
+mpirun -n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK $EXE
 ```
 In highlighted line we set name of the directory where we store measurements. This is not required, but helps identifying the measurement later on.
 
@@ -218,24 +240,24 @@ Score-P measurements are configured via environment variables with the prefix `S
 
 Now we are ready to submit our batch script:
 ```bash
-sbatch scorep.sbatch
+sbatch scorep.sbatch.C.8
 ```
 
 Once your job complete check what is new in the execution directory
 ```bash
 $ ls -l
-bt-mz_C.28
-bt-mz.657477.out
-bt-mz.657477.err
-scorep_bt-mz_sum
+bt-mz_C.8
+profile-C.8-<jobid>.err
+profile-C.8-<jobid>.out
+scorep_bt-mz_C_8x6_sum
 scorep.sbatch
 ```
 
-What we see new there? `bt-mz.657477.err` includes stderr output, `bt-mz.657477.out` includes stdout output, and `scorep_bt-mz_sum` includes the measurement results collected by our instrumented application.
+What we see new there? `profile-C.8-<jobid>.err` includes stderr output, `profile-C.8-<jobid>.out` includes stdout output, and `scorep_bt-mz_C_8x6_sum` includes the measurement results collected by our instrumented application.
 
 Let's examine what is inside measurement directory:
 ```bash
-$ ls -1 scorep_bt-mz_sum/
+$ ls -1 scorep_bt-mz_C_8x6_sum/
 MANIFEST.md
 profile.cubex
 scorep.cfg
