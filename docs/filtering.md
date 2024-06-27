@@ -221,7 +221,13 @@ Please refer to the Score-P manual [here](https://perftools.pages.jsc.fz-juelich
 
 :::
 
-The effectiveness of this filter can be examined by scoring the initial summary report again, this time specifying the filter file using the `-f` option of the `scorep-score -r -f ../config/scorep.filt scorep_bt-mz_sum/profile.cubex` command. This way a filter file can be incrementally developed, avoiding the need to conduct many measurements to step-by-step investigate the effect of filtering individual functions.
+The effectiveness of this filter can be examined by scoring the initial summary report again, this time specifying the filter file using the `-f` option of the command:
+
+```bash
+$ scorep-score -r -f ../config/scorep.filt scorep_bt-mz_sum/profile.cubex
+```
+
+This way a filter file can be incrementally developed, avoiding the need to conduct many measurements to step-by-step investigate the effect of filtering individual functions.
 
 The output of the aforementioned command will look like this:  
 ```
