@@ -6,10 +6,10 @@ sidebar_position: 4
 Congratulations, now we collected our first measurements with acceptable runtime dilation. This new measurement should accurately represent the real runtime behavior of the BT-MZ application, and can now be postprocessed and interactively explored using the Cube browser. These two steps can be conveniently initiated using the following command:
 ```bash
 $ # Load modules if not loaded already
-$ module load intel intel-mpi/2019-intel nano
-$ module use /lrz/sys/courses/vihps/2024/modulefiles/
-$ module load scorep/8.4-intel-intelmpi scalasca/2.6.1-intel-intelmpi
-$ square scorep_bt-mz_sum_filt/
+$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
+$ module use /jet/home/zhukov/ihpcss24/modules/
+$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ square scorep_bt-mz_C_8x6_sum_filt
 ```
 
 This command will post-process a `profile.cubex` and create a summary report `summary.cubex`, then open the CUBE browser.

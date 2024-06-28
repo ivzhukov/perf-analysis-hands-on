@@ -150,7 +150,7 @@ const config: Config = {
             },
             {
               label: 'EPICURE',
-              href: 'https://eurohpc-ju.europa.eu/epicure-new-ri-project-launched-eurohpc-ju-2024-02-07_en',
+              href: 'https://epicure-hpc.eu',
             },
           ],
         },
