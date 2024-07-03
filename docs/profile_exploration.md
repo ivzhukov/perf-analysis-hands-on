@@ -9,6 +9,7 @@ $ # Load modules if not loaded already
 $ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
 $ module use /jet/home/zhukov/ihpcss24/modules/
 $ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ # execute postprocessing
 $ square scorep_bt-mz_C_8x6_sum_filt
 ```
 

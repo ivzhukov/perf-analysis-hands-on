@@ -24,62 +24,65 @@ Renaming or removing the summary experiment directory is not necessary, as trace
 Make sure that all required software is available
 ```bash
 $ # Load modules if not loaded already
-$ module load intel intel-mpi/2019-intel nano
-$ module use /lrz/sys/courses/vihps/2024/modulefiles/
-$ module load scorep/8.4-intel-intelmpi scalasca/2.6.1-intel-intelmpi
+$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
+$ module use /jet/home/zhukov/ihpcss24/modules/
+$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
 ```
 
 Go to our work directory with already build executable and prepared filtering file 
 ```bash
-$ cd $HOME/tw45/NPB3.3-MZ-MPI/bin.scorep
+$ cd $HOME/ihpcss24/NPB3.3-MZ-MPI/bin.scorep
 ```
 
-Let's copy `scalasca.sbatch` to the current directory
+Let's copy `scalasca.sbatch.C.8` to the current directory
 ```bash
-$ cp ../jobscript/coolmuc2/scalasca.sbatch .
+$ cp ../jobscript/bridges2/scalasca.sbatch.C.8 .
 ```
 
-Let's examine what `scalasca.sbatch` does by executing `nano scalasca.batch`
+Let's examine what `scalasca.sbatch.C.8` does by executing `nano scalasca.batch.C.8`
 ```bash showLineNumbers
-#!/bin/bash
-#SBATCH -o bt-mz.%j.out
-#SBATCH -e bt-mz.%j.err
-#SBATCH -J bt-mz
-#SBATCH --clusters=cm2_tiny
-#SBATCH --partition=cm2_tiny
-#SBATCH --reservation=hhps1s24
-#SBATCH --nodes=2
-#SBATCH --ntasks=28
-#SBATCH --ntasks-per-node=14
-#SBATCH --get-user-env
-#SBATCH --time=00:05:00
+#SBATCH -J mzmpibt             # job name
+#SBATCH -o trace-C.8-%j.out    # stdout output file
+#SBATCH -e trace-C.8-%j.err    # stderr output file
+#SBATCH --nodes=2              # requested nodes
+#SBATCH --ntasks=8             # requested MPI tasks
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=6      # requested logical CPUs/threads per task
+#SBATCH --partition RM         # partition to use
+#SBATCH --account=tra210016p   # account to charge
+#SBATCH --export=ALL           # export env varibales
+#SBATCH --time=00:10:00        # max wallclock time (hh:mm:ss)
+#SBATCH --reservation=PerfRM10Jul10
 
-module use /lrz/sys/courses/vihps/2024/modulefiles/
-module load scorep/8.4-intel-intelmpi scalasca/2.6.1-intel-intelmpi
-export OMP_NUM_THREADS=4
+# setup modules, add tools to PATH
+set -x
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+module use /jet/home/zhukov/ihpcss24/modules/
+module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scalasca/2.6-gcc_openmpi
+
+# benchmark configuration
+export NPB_MZ_BLOAD=0
+CLASS=C
+PROCS=$SLURM_NTASKS
+EXE=./bt-mz_$CLASS.$PROCS
 
 # Score-P measurement configuration
-
 # highlight-start
 export SCOREP_FILTERING_FILE=../config/scorep.filt
 export SCOREP_TOTAL_MEMORY=27MB
 #export SCAN_ANALYZE_OPTS="--time-correct"
 # highlight-end
 
-# Benchmark configuration (disable load balancing with threads)
-export NPB_MZ_BLOAD=0
-PROCS=28
-CLASS=C
-
 # Run the application
 # highlight-next-line
-scalasca -analyze -t mpiexec -n $SLURM_NTASKS ./bt-mz_$CLASS.$PROCS
+scalasca -analyze -t mpirun "-n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK" $EXE
 ```
 In the first highlighted lines we set the measurement configuration, i.e. use the prepared filter file and set the required amount of memory for tracing based on scoring. And in the last highlighted line we enabled Scalasca trace analysis with the `-t` option.
 
 Now we are ready to submit our batch script
 ```bash
-sbatch scalasca.sbatch
+sbatch scalasca.sbatch.C.8
 ```
 
 After successful trace collection and analysis you should see freshly generated experiment directory `scorep_bt-mz_C_8x6_trace`. Let us examine what is inside this directory:
@@ -102,26 +105,26 @@ Among the already known files there are some new ones, e.g. a copy of the filter
 Let's examine `scout.log` if the trace analysis was successful:
 ```
 $ cat scorep_bt-mz_C_8x6_trace/scout.log
-S=C=A=N: Tue Jun  4 18:42:20 2024: Analyze start
-/dss/dsshome1/lrz/sys/spack/release/22.2.1/opt/x86_64/intel-mpi/2019.12.320-gcc-wx7cjlg/compilers_and_libraries_2020.4.320/linux/mpi/intel64/bin/mpiexec -n 28 /lrz/sys/courses/vihps/2024/tools/scalasca/2.6.1/intel_intelmpi/bin/scout.hyb ./scorep_bt-mz_C_28x4_trace/traces.otf2
+S=C=A=N: Wed Jun 26 08:36:14 2024: Analyze start
+/jet/packages/spack/opt/spack/linux-centos8-zen2/gcc-10.2.0/openmpi-4.0.5-i77nnmggpclrp6x53f7e5vpc4afn5p5c/bin/mpirun -n 8 --cpus-per-rank 6 /jet/home/zhukov/ihpcss24/tools/scalasca/2.6.1/gcc_openmpi/bin/scout.hyb ./scorep_bt-mz_C_8x6_trace/traces.otf2
 SCOUT   (Scalasca 2.6.1)
 Copyright (c) 1998-2022 Forschungszentrum Juelich GmbH
 Copyright (c) 2014-2021 RWTH Aachen University
 Copyright (c) 2009-2014 German Research School for Simulation Sciences GmbH
 
-Analyzing experiment archive ./scorep_bt-mz_C_28x4_trace/traces.otf2
+Analyzing experiment archive ./scorep_bt-mz_C_8x6_trace/traces.otf2
 
-Opening experiment archive ... done (0.013s).
-Reading definition data    ... done (0.015s).
-Reading event trace data   ... done (0.131s).
-Preprocessing              ... done (0.181s).
-Analyzing trace data       ... done (10.301s).
-Writing analysis report    ... done (0.129s).
+Opening experiment archive ... done (0.003s).
+Reading definition data    ... done (0.003s).
+Reading event trace data   ... done (0.143s).
+Preprocessing              ... done (0.354s).
+Analyzing trace data       ... done (8.191s).
+Writing analysis report    ... done (0.111s).
 
-Max. memory usage         : 279.777MB
+Max. memory usage         : 910.383MB
 
-Total processing time     : 10.841s
-S=C=A=N: Tue Jun  4 18:42:37 2024: Analyze done (status=0) 17s
+Total processing time     : 8.921s
+S=C=A=N: Wed Jun 26 08:36:23 2024: Analyze done (status=0) 9s
 ```
 There are no errors or warnings, so the analysis was successful. 
 

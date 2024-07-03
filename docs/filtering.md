@@ -397,7 +397,7 @@ Let's modify our batch script `scorep.sbatch.C.8` to enable filtering (see highl
 #SBATCH --account=tra210016p   # account to charge
 #SBATCH --export=ALL           # export env varibales
 #SBATCH --time=00:10:00        # max wallclock time (hh:mm:ss)
-##SBATCH --reservation=ihpcssday3RM10
+#SBATCH --reservation=PerfRM10Jul10
 
 # setup modules, add tools to PATH
 set -x

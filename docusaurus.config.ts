@@ -127,6 +127,10 @@ const config: Config = {
               label: 'Scalasca',
               href: 'https://www.scalasca.org/scalasca/software/scalasca-2.x/download.html',
             },
+            {
+              label: 'Vampir',
+              href: 'https://vampir.eu',
+            },
           ],
         },
         {
