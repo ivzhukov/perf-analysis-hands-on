@@ -27,7 +27,7 @@ A click on a performance property or a call path selects the corresponding node.
 
 ![CUBE](cube.png)
 
-For example, in the figure we can see the distribution of the "Computation time" of the following three functions `x_solve`, `y_solve`, `z_solve` over 14 MPI ranks on node one and accumulated time across all MPI ranks on node two .
+For example, in the figure we can see the distribution of the "Computation time" of the following three functions `x_solve`, `y_solve`, `z_solve` over 4 MPI ranks on node one and accumulated time across all MPI ranks on node two .
 
 All tree displays support a context menu, which is accessible using the right mouse button and provides further options. For example, to obtain the exact definition of a performance property, select "Online Description" in the context menu associated with each performance property. A brief description can also be obtained from the menu option "Info".
 
