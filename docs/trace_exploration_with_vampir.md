@@ -20,7 +20,7 @@ $ cd <my_directory>
 $ # copy files from Bridges-2 to your current directory 
 $ scp userid@bridges2.psc.edu:/jet/home/zhukov/ihpcss24/tutorial/measurements_bridges2.tar.gz .
 $ # untar experiments
-$ tar xvx measurements_bridges2.tar.gz
+$ tar xvf measurements_bridges2.tar.gz
 ```
 
 Go to the directory where experiments are stored 

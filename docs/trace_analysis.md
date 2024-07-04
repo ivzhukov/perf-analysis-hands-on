@@ -39,7 +39,7 @@ Let's copy `scalasca.sbatch.C.8` to the current directory
 $ cp ../jobscript/bridges2/scalasca.sbatch.C.8 .
 ```
 
-Let's examine what `scalasca.sbatch.C.8` does by executing `nano scalasca.batch.C.8`
+Let's examine what `scalasca.sbatch.C.8` does by executing `nano scalasca.sbatch.C.8`
 ```bash showLineNumbers
 #SBATCH -J mzmpibt             # job name
 #SBATCH -o trace-C.8-%j.out    # stdout output file

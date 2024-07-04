@@ -194,7 +194,7 @@ $ cd bin.scorep
 $ cp ../jobscript/bridges2/scorep.sbatch.C.8 .
 ```
 
-Let's examine what `scorep.sbatch.C.8` does by executing `nano scorep.batch`
+Let's examine what `scorep.sbatch.C.8` does by executing `nano scorep.sbatch.C.8`
 ```bash showLineNumbers
 #!/bin/bash
 #SBATCH -J mzmpibt             # job name
@@ -250,7 +250,7 @@ bt-mz_C.8
 profile-C.8-<jobid>.err
 profile-C.8-<jobid>.out
 scorep_bt-mz_C_8x6_sum
-scorep.sbatch
+scorep.sbatch.C.8
 ```
 
 What we see new there? `profile-C.8-<jobid>.err` includes stderr output, `profile-C.8-<jobid>.out` includes stdout output, and `scorep_bt-mz_C_8x6_sum` includes the measurement results collected by our instrumented application.

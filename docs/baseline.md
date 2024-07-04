@@ -32,7 +32,7 @@ $ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
 Start by copying the tutorial sources to your working directory:
 ```bash
 $ cd $HOME/ihpcss24
-$ tar zxvf /jet/home/zhukov/ihpcss24/tutorial/NPB3.3-MZ-MPI.tar.gz .
+$ tar xvf /jet/home/zhukov/ihpcss24/tutorial/NPB3.3-MZ-MPI.tar.gz
 $ cd $HOME/ihpcss24/NPB3.3-MZ-MPI
 ```
 
@@ -151,8 +151,8 @@ If compilation succeeds, you can find in the ```bin``` directory.
 Lets go to the ```bin``` directory, copy a prepared batch script and examine what it does:
 ```bash
 $ cd bin
-$ cp ../jobscript/bridges2/reference.sbatch .
-$ nano reference.sbatch
+$ cp ../jobscript/bridges2/reference.sbatch.C.8 .
+$ nano reference.sbatch.C.8
 ```
 Here is what you should see in your batch script:
 ```bash
