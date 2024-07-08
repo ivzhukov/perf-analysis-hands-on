@@ -13,7 +13,9 @@ Make sure you have Vampir installed on your local laptop. You can download demo 
 
 :::
 
-You can copy prepared traces from [here](https://fz-juelich.sciebo.de/s/qBq6OrhJImHulbr) or from Bridges-2 via the following command executed on you local machine  
+If you have copied profiles/traces before please proceed to the next step.
+
+If not, you can copy prepared traces from [here](https://fz-juelich.sciebo.de/s/qBq6OrhJImHulbr) or from Bridges-2 via the following command executed on you local machine  
 ```bash
 $ # go to the directory were you want to store measurements
 $ cd <my_directory>

@@ -19,6 +19,26 @@ This command will post-process a `profile.cubex` and create a summary report `su
 
 Exploring profiles via the CUBE over SSH can be very slow due to the high data transfer rates and latency involved. To improve performance, it is recommended to copy the profile data to a local machine where CUBE is installed. By examining the profile locally, you can benefit from faster data access and more responsive analysis, leading to a more efficient and effective performance tuning process.
 
+You can copy prepared profiles and traces from [here](https://fz-juelich.sciebo.de/s/qBq6OrhJImHulbr) or from Bridges-2 via the following command executed on you local machine  
+```bash
+$ # go to the directory were you want to store measurements
+$ cd <my_directory>
+$ # copy files from Bridges-2 to your current directory 
+$ scp userid@bridges2.psc.edu:/jet/home/zhukov/ihpcss24/tutorial/measurements_bridges2.tar.gz .
+$ # untar experiments
+$ tar xvf measurements_bridges2.tar.gz
+```
+
+Go to the directory where experiments are stored 
+```bash
+$ cd measurements_bridges2/bin.scorep/
+```
+
+Open collected traces with CUBE
+```bash
+$ cube scorep_bt-mz_C_8x6_sum_filt/summary.cubex
+```
+
 :::
 
 Cube is a generic user interface for presenting and browsing performance and debugging information from parallel applications. The Cube main window consists of three coupled panels containing tree displays or alternate graphical views of analysis reports. The left panel shows *performance properties* of the execution, such as time or the number of visits. The middle pane shows the *call tree* or a flat profile of the application. The right pane either shows the *system hierarchy* consisting of, e.g., machines, compute nodes, processes, and threads, a topological view of the application's processes and threads (if available), or a *box plot* view showing the statistical distribution of values across the system. All tree nodes are labeled with a metric value and a color-coded box which can help in identifying hotspots. The metric value color is determined from the proportion of the total (root) value or some other specified reference value, using the color scale at the bottom of the window.
