@@ -70,7 +70,7 @@ EXE=./bt-mz_$CLASS.$PROCS
 # Score-P measurement configuration
 # highlight-start
 export SCOREP_FILTERING_FILE=../config/scorep.filt
-export SCOREP_TOTAL_MEMORY=27MB
+export SCOREP_TOTAL_MEMORY=95MB
 #export SCAN_ANALYZE_OPTS="--time-correct"
 # highlight-end
 
