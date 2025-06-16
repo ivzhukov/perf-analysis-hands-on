@@ -24,14 +24,14 @@ Renaming or removing the summary experiment directory is not necessary, as trace
 Make sure that all required software is available
 ```bash
 $ # Load modules if not loaded already
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
-$ module use /jet/home/zhukov/ihpcss24/modules/
-$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
+$ module use /jet/home/zhukov/ihpcss25/modules/
+$ module load scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
 ```
 
 Go to our work directory with already build executable and prepared filtering file 
 ```bash
-$ cd $HOME/ihpcss24/NPB3.3-MZ-MPI/bin.scorep
+$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI/bin.scorep
 ```
 
 Let's copy `scalasca.sbatch.C.8` to the current directory
@@ -52,14 +52,13 @@ Let's examine what `scalasca.sbatch.C.8` does by executing `nano scalasca.sbatch
 #SBATCH --account=tra210016p   # account to charge
 #SBATCH --export=ALL           # export env varibales
 #SBATCH --time=00:10:00        # max wallclock time (hh:mm:ss)
-#SBATCH --reservation=PerfRM10Jul10
 
 # setup modules, add tools to PATH
 set -x
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-module use /jet/home/zhukov/ihpcss24/modules/
-module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scalasca/2.6-gcc_openmpi
+module use /jet/home/zhukov/ihpcss25/modules/
+module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1 scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
 
 # benchmark configuration
 export NPB_MZ_BLOAD=0
@@ -105,8 +104,8 @@ Among the already known files there are some new ones, e.g. a copy of the filter
 Let's examine `scout.log` if the trace analysis was successful:
 ```
 $ cat scorep_bt-mz_C_8x6_trace/scout.log
-S=C=A=N: Wed Jun 26 08:36:14 2024: Analyze start
-/jet/packages/spack/opt/spack/linux-centos8-zen2/gcc-10.2.0/openmpi-4.0.5-i77nnmggpclrp6x53f7e5vpc4afn5p5c/bin/mpirun -n 8 --cpus-per-rank 6 /jet/home/zhukov/ihpcss24/tools/scalasca/2.6.1/gcc_openmpi/bin/scout.hyb ./scorep_bt-mz_C_8x6_trace/traces.otf2
+S=C=A=N: Wed Jun 16 08:36:14 2025: Analyze start
+/opt/packages/openmpi/5.0.8/gnu-13.3.1/bin/mpirun -n 8 --cpus-per-rank 6 /jet/home/zhukov/ihpcss25/tools/scalasca/2.6.2/gcc_openmpi/bin/scout.hyb ./scorep_bt-mz_C_8x6_trace/traces.otf2
 SCOUT   (Scalasca 2.6.1)
 Copyright (c) 1998-2022 Forschungszentrum Juelich GmbH
 Copyright (c) 2014-2021 RWTH Aachen University
@@ -124,7 +123,7 @@ Writing analysis report    ... done (0.111s).
 Max. memory usage         : 910.383MB
 
 Total processing time     : 8.921s
-S=C=A=N: Wed Jun 26 08:36:23 2024: Analyze done (status=0) 9s
+S=C=A=N: Wed Jun 16 08:36:23 2025: Analyze done (status=0) 9s
 ```
 There are no errors or warnings, so the analysis was successful. 
 
