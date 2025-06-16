@@ -17,23 +17,23 @@ The **-Y** option is necessary to enable X11 forwarding. X11 forwarding is a SSH
 Now we need to create our own directory for the exercises:
 
 ```bash
-$ mkdir -p $HOME/ihpcss24
+$ mkdir -p $HOME/ihpcss25
 ```
 The **-p** prevents error messages if the specified directories already exists.
 
 Then, we need to load required software, e.g. compiler, MPI, text editor:
 
 ```bash
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
+$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
 ```
 
 ## Build benchmark
 
 Start by copying the tutorial sources to your working directory:
 ```bash
-$ cd $HOME/ihpcss24
-$ tar xvf /jet/home/zhukov/ihpcss24/tutorial/NPB3.3-MZ-MPI.tar.gz
-$ cd $HOME/ihpcss24/NPB3.3-MZ-MPI
+$ cd $HOME/ihpcss25
+$ tar xvf /jet/home/zhukov/ihpcss25/tutorial/NPB3.3-MZ-MPI.tar.gz
+$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI
 ```
 
 For this tutorial we are going to use the NAS Parallel Benchmark suite (MPI+OpenMP version). It is available [here](http://www.nas.nasa.gov/Software/NPB), and includes three benchmarks written in Fortran77. You can configure the benchmark for various sizes and classes. This allows the benchmark to be used on a wide range of systems, from workstations to supercomputers.
@@ -141,9 +141,9 @@ mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  mpi_setup.f
 cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  print_results.f
 cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  timers.f
 mpif77 -O3 -fopenmp	 -fallow-argument-mismatch  -o ../bin/bt-mz_C.8 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
 Built executable ../bin/bt-mz_C.8
-make[1]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+make[1]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
 ```
 If compilation succeeds, you can find in the ```bin``` directory.
 
@@ -168,11 +168,10 @@ Here is what you should see in your batch script:
 #SBATCH --account=tra210016p # account to charge
 #SBATCH --export=ALL         # export env varibales
 #SBATCH --time=00:10:00      # max wallclock time (hh:mm:ss)
-#SBATCH --reservation=PerfRM10Jul10
 
 # setup modules, add tools to PATH
 set -x
-module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
+module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
