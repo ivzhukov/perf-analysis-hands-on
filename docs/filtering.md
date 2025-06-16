@@ -224,7 +224,7 @@ Please refer to the Score-P manual [here](https://perftools.pages.jsc.fz-juelich
 The effectiveness of this filter can be examined by scoring the initial summary report again, this time specifying the filter file using the `-f` option of the command:
 
 ```bash
-$ scorep-score -r -f ../config/scorep.filt scorep_bt-mz_sum/profile.cubex
+$ scorep-score -r -f ../config/scorep.filt scorep_bt-mz_C_8x6_sum/profile.cubex
 ```
 
 This way a filter file can be incrementally developed, avoiding the need to conduct many measurements to step-by-step investigate the effect of filtering individual functions.
@@ -397,14 +397,13 @@ Let's modify our batch script `scorep.sbatch.C.8` to enable filtering (see highl
 #SBATCH --account=tra210016p   # account to charge
 #SBATCH --export=ALL           # export env varibales
 #SBATCH --time=00:10:00        # max wallclock time (hh:mm:ss)
-#SBATCH --reservation=PerfRM10Jul10
 
 # setup modules, add tools to PATH
 set -x
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-module use /jet/home/zhukov/ihpcss24/modules/
-module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scalasca/2.6-gcc_openmpi
+module use /jet/home/zhukov/ihpcss25/modules/
+module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1 scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
 
 # benchmark configuration
 export NPB_MZ_BLOAD=0
