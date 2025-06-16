@@ -115,12 +115,12 @@ $ make bt-mz CLASS=C NPROCS=8
    ===========================================
 
 cd BT-MZ; make CLASS=C NPROCS=8 VERSION=
-make[1]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
-make[2]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/sys'
+make[1]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/sys'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
 ../sys/setparams bt-mz 8 C
-make[2]: Entering directory '/jet/home/zhukov/ihpcss24/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
 mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  bt.f
 mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  initialize.f
 mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exact_solution.f
@@ -260,7 +260,7 @@ Once the job has finished you will see two files in your directory, one with sta
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1
- Compile date    =              26 Jun 2024
+ Compile date    =              16 Jun 2025
  ```
 
 The most important metric in the output is "Time in seconds" which indicates how much time the application spent executing 200 iterations (pre and post. processing are excluded from the time measurement). Further, "Validation" is important as it indicates if the computation completed successfully (e.g. converged). Please write down the time value you received, as we are going to refer to its value in the next section.
