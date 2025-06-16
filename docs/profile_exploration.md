@@ -6,9 +6,9 @@ sidebar_position: 4
 Congratulations, now we collected our first measurements with acceptable runtime dilation. This new measurement should accurately represent the real runtime behavior of the BT-MZ application, and can now be postprocessed and interactively explored using the Cube browser. These two steps can be conveniently initiated using the following command:
 ```bash
 $ # Load modules if not loaded already
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
-$ module use /jet/home/zhukov/ihpcss24/modules/
-$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
+$ module use /jet/home/zhukov/ihpcss25/modules/
+$ module load scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
 $ # execute postprocessing
 $ square scorep_bt-mz_C_8x6_sum_filt
 ```
@@ -24,7 +24,7 @@ You can copy prepared profiles and traces from [here](https://fz-juelich.sciebo.
 $ # go to the directory were you want to store measurements
 $ cd <my_directory>
 $ # copy files from Bridges-2 to your current directory 
-$ scp userid@bridges2.psc.edu:/jet/home/zhukov/ihpcss24/tutorial/measurements_bridges2.tar.gz .
+$ scp userid@bridges2.psc.edu:/jet/home/zhukov/ihpcss25/tutorial/measurements_bridges2.tar.gz .
 $ # untar experiments
 $ tar xvf measurements_bridges2.tar.gz
 ```
