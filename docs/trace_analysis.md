@@ -107,7 +107,7 @@ $ cat scorep_bt-mz_C_8x6_trace/scout.log
 S=C=A=N: Wed Jun 16 08:36:14 2025: Analyze start
 /opt/packages/openmpi/5.0.8/gnu-13.3.1/bin/mpirun -n 8 --cpus-per-rank 6 /jet/home/zhukov/ihpcss25/tools/scalasca/2.6.2/gcc_openmpi/bin/scout.hyb ./scorep_bt-mz_C_8x6_trace/traces.otf2
 SCOUT   (Scalasca 2.6.1)
-Copyright (c) 1998-2022 Forschungszentrum Juelich GmbH
+Copyright (c) 1998-2025 Forschungszentrum Juelich GmbH
 Copyright (c) 2014-2021 RWTH Aachen University
 Copyright (c) 2009-2014 German Research School for Simulation Sciences GmbH
 
