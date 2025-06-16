@@ -20,7 +20,7 @@ If not, you can copy prepared traces from [here](https://fz-juelich.sciebo.de/s/
 $ # go to the directory were you want to store measurements
 $ cd <my_directory>
 $ # copy files from Bridges-2 to your current directory 
-$ scp userid@bridges2.psc.edu:/jet/home/zhukov/ihpcss24/tutorial/measurements_bridges2.tar.gz .
+$ scp userid@bridges2.psc.edu:/jet/home/zhukov/ihpcss25/tutorial/measurements_bridges2.tar.gz .
 $ # untar experiments
 $ tar xvf measurements_bridges2.tar.gz
 ```
