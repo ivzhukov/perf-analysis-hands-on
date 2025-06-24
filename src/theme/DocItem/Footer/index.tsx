@@ -2,7 +2,7 @@ import React from "react";
 import DocItemFooter from "@theme-original/DocItem/Footer";
 import type DocItemFooterType from "@theme/DocItem/Footer";
 import type { WrapperProps } from "@docusaurus/types";
-import { useActiveDocContext } from "@docusaurus/plugin-content-docs/client";
+import { useDoc } from '@docusaurus/theme-common/internal';
 import Comments from "@site/src/components/Comments";
 
 type Props = WrapperProps<typeof DocItemFooterType>;
