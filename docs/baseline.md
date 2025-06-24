@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-comments: true # for Gisqus
+
 ---
 # Baseline measurement
 
