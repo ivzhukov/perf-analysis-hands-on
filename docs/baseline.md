@@ -25,7 +25,7 @@ The **-p** prevents error messages if the specified directories already exists.
 Then, we need to load required software, e.g. compiler, MPI, text editor:
 
 ```bash
-$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
+$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
 ```
 
 ## Build benchmark
@@ -182,7 +182,7 @@ CLASS=C
 PROCS=$SLURM_NTASKS
 EXE=./bt-mz_$CLASS.$PROCS
 
-mpirun -n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK $EXE
+mpirun -n $SLURM_NTASKS $EXE
 ```
 To exit text editor you can use ```Ctrl+X```
 

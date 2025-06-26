@@ -24,9 +24,9 @@ Renaming or removing the summary experiment directory is not necessary, as trace
 Make sure that all required software is available
 ```bash
 $ # Load modules if not loaded already
-$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
+$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
 $ module use /jet/home/zhukov/ihpcss25/modules/
-$ module load scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
+$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
 ```
 
 Go to our work directory with already build executable and prepared filtering file 
@@ -58,7 +58,7 @@ set -x
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 module use /jet/home/zhukov/ihpcss25/modules/
-module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1 scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
+module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
 
 # benchmark configuration
 export NPB_MZ_BLOAD=0
@@ -75,7 +75,7 @@ export SCOREP_TOTAL_MEMORY=95MB
 
 # Run the application
 # highlight-next-line
-scalasca -analyze -t mpirun "-n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK" $EXE
+scalasca -analyze -t mpirun -n $SLURM_NTASKS $EXE
 ```
 In the first highlighted lines we set the measurement configuration, i.e. use the prepared filter file and set the required amount of memory for tracing based on scoring. And in the last highlighted line we enabled Scalasca trace analysis with the `-t` option.
 
@@ -103,27 +103,26 @@ Among the already known files there are some new ones, e.g. a copy of the filter
 
 Let's examine `scout.log` if the trace analysis was successful:
 ```
-$ cat scorep_bt-mz_C_8x6_trace/scout.log
-S=C=A=N: Wed Jun 16 08:36:14 2025: Analyze start
-/opt/packages/openmpi/5.0.8/gnu-13.3.1/bin/mpirun -n 8 --cpus-per-rank 6 /jet/home/zhukov/ihpcss25/tools/scalasca/2.6.2/gcc_openmpi/bin/scout.hyb ./scorep_bt-mz_C_8x6_trace/traces.otf2
+S=C=A=N: Thu Jun 16 07:40:59 2025: Analyze start
+/jet/packages/spack/opt/spack/linux-centos8-zen2/gcc-10.2.0/openmpi-4.0.5-i77nnmggpclrp6x53f7e5vpc4afn5p5c/bin/mpirun -n 8 /jet/home/zhukov/ihpcss25/tools/scalasca/2.6.1/gcc_openmpi/bin/scout.hyb ./scorep_bt-mz_C_8x6_trace/traces.otf2
 SCOUT   (Scalasca 2.6.1)
-Copyright (c) 1998-2025 Forschungszentrum Juelich GmbH
+Copyright (c) 1998-2022 Forschungszentrum Juelich GmbH
 Copyright (c) 2014-2021 RWTH Aachen University
 Copyright (c) 2009-2014 German Research School for Simulation Sciences GmbH
 
 Analyzing experiment archive ./scorep_bt-mz_C_8x6_trace/traces.otf2
 
-Opening experiment archive ... done (0.003s).
+Opening experiment archive ... done (0.007s).
 Reading definition data    ... done (0.003s).
-Reading event trace data   ... done (0.143s).
-Preprocessing              ... done (0.354s).
-Analyzing trace data       ... done (8.191s).
-Writing analysis report    ... done (0.111s).
+Reading event trace data   ... done (0.238s).
+Preprocessing              ... done (0.501s).
+Analyzing trace data       ... done (12.885s).
+Writing analysis report    ... done (0.125s).
 
-Max. memory usage         : 910.383MB
+Max. memory usage         : 919.910MB
 
-Total processing time     : 8.921s
-S=C=A=N: Wed Jun 16 08:36:23 2025: Analyze done (status=0) 9s
+Total processing time     : 13.860s
+S=C=A=N: Thu Jun 16 07:41:14 2025: Analyze done (status=0) 15s
 ```
 There are no errors or warnings, so the analysis was successful. 
 

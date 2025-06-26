@@ -10,10 +10,10 @@ sidebar_position: 2
  To use Score-P, we first need to make sure that all required software is available:
 ```bash
 $ # Reload modules if needed
-$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
+$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 
 $ # Load additional software being used in the following steps
 $ module use /jet/home/zhukov/ihpcss25/modules/
-$ module load scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
+$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
 ```
 
 We loaded Scalasca trace tools at this stage as well to use convenience commands that allow to control execution measurement collection and analysis, and analysis report postprocessing. This is not necessary but highly recommended step to do.
@@ -214,7 +214,7 @@ set -x
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 module use /jet/home/zhukov/ihpcss25/modules/
-module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1 scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
+module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
 
 # benchmark configuration
 export NPB_MZ_BLOAD=0
@@ -227,7 +227,7 @@ EXE=./bt-mz_$CLASS.$PROCS
 export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_${CLASS}_${PROCS}x${OMP_NUM_THREADS}_sum
 #export SCOREP_FILTERING_FILE=../config/scorep.filt
 
-mpirun -n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK $EXE
+mpirun -n $SLURM_NTASKS $EXE
 ```
 In highlighted line we set name of the directory where we store measurements. This is not required, but helps identifying the measurement later on.
 

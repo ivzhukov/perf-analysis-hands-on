@@ -403,7 +403,7 @@ set -x
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 module use /jet/home/zhukov/ihpcss25/modules/
-module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1 scorep/9.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
+module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
 
 # benchmark configuration
 export NPB_MZ_BLOAD=0
@@ -417,7 +417,7 @@ export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_${CLASS}_${PROCS}x${OMP_NUM_THRE
 export SCOREP_FILTERING_FILE=../config/scorep.filt
 # highlight-end
 
-mpirun -n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK $EXE
+mpirun -n $SLURM_NTASKS $EXE
 ```
 In first highlighted line we added suffix `_filt` to create measurement directory with a different name. In the second one we provided name of the filter file which will be used during the measurement.
 
