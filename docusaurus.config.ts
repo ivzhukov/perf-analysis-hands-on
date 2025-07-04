@@ -134,6 +134,23 @@ const config: Config = {
           ],
         },
         {
+          title: 'Tutorial',
+          items: [
+            {
+              label: 'Slides',
+              href: 'https://fz-juelich.sciebo.de/s/mOgI7G6gIfS4RnY',
+            },
+            {
+              label: 'Download NPB3.3-MZ-MPI benchmark',
+              href: 'https://fz-juelich.sciebo.de/s/4QBRlodmI2Zd1jH',
+            },
+            {
+              label: 'Bridges-2 measurements',
+              href: 'https://fz-juelich.sciebo.de/s/oAznxYjPUWSIFAf',
+            },
+          ],
+        },       
+        {
           title: 'Useful Links',
           items: [
             {
