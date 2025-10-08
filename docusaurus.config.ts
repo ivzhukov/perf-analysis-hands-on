@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'IHPCSS25',
+  title: 'Parallel Programming Workshop (MPI, OpenMP and Advanced Topics)',
   tagline: 'Performance Analysis Hands-On',
   favicon: 'img/logo.ico',
 
@@ -17,7 +17,7 @@ const config: Config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'ivzhukov', // Usually your GitHub org/user name.
   projectName: 'perf-analysis-hands-on', // Usually your repo name.
-  deploymentBranch: "gh-pages",
+  deploymentBranch: "hlrs_2025",
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
