@@ -19,7 +19,7 @@ This command will post-process a `profile.cubex` and create a summary report `su
 
 Exploring profiles via the CUBE over SSH can be very slow due to the high data transfer rates and latency involved. To improve performance, it is recommended to copy the profile data to a local machine where CUBE is installed. By examining the profile locally, you can benefit from faster data access and more responsive analysis, leading to a more efficient and effective performance tuning process.
 
-You can copy prepared profiles and traces from [here](https://fz-juelich.sciebo.de/s/qBq6OrhJImHulbr) or from Bridges-2 via the following command executed on you local machine  
+You can copy prepared profiles and traces from [here](https://fz-juelich.sciebo.de/s/sGAzY4FTnpnHpBo) or from HLRS training cluster via the following command executed on you local machine  
 ```bash
 $ # go to the directory were you want to store measurements (on your laptop!)
 $ cd <my_directory>
