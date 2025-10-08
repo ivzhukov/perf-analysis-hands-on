@@ -13,7 +13,7 @@ Traces can easily become extremely large and unwieldy, and uncoordinated interme
 
 :::
 
-For our example measurement, scoring of the initial summary report with the filter applied estimated a total memory requirement of 27MB per process (see [scoring report here](./filtering.md)). As this exceeds the default `SCOREP_TOTAL_MEMORY` setting of 16MB, use of the prepared filtering file alone is not yet sufficient to avoid intermediate trace buffer flushes. In addition, the `SCOREP_TOTAL_MEMORY` setting has to be adjusted accordingly before starting the trace collection and analysis. 
+For our example measurement, scoring of the initial summary report with the filter applied estimated a total memory requirement of 59MB per process (see [scoring report here](./filtering.md)). As this exceeds the default `SCOREP_TOTAL_MEMORY` setting of 16MB, use of the prepared filtering file alone is not yet sufficient to avoid intermediate trace buffer flushes. In addition, the `SCOREP_TOTAL_MEMORY` setting has to be adjusted accordingly before starting the trace collection and analysis. 
 
 :::info
 
@@ -23,76 +23,73 @@ Renaming or removing the summary experiment directory is not necessary, as trace
 
 Make sure that all required software is available
 ```bash
-$ # Load modules if not loaded already
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
-$ module use /jet/home/zhukov/ihpcss25/modules/
-$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ # Reload modules if needed
+$ module load compiler/gcc/14.2.0 mpi/openmpi/5.0.7-gcc-14.2.0
+$ # Load additional software being used in the following steps
+$ module load score-p cube scalasca
 ```
 
 Go to our work directory with already build executable and prepared filtering file 
 ```bash
-$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI/bin.scorep
+$ cd $HOME/performance_analysis/NPB3.3-MZ-MPI/bin.scorep
 ```
 
-Let's copy `scalasca.sbatch.C.8` to the current directory
+Let's copy `scalasca.pbs` to the current directory
 ```bash
-$ cp ../jobscript/bridges2/scalasca.sbatch.C.8 .
+$ cp ../jobscript/hlrs_training/scalasca.pbs .
 ```
 
-Let's examine what `scalasca.sbatch.C.8` does by executing `nano scalasca.sbatch.C.8`
+Let's examine what `scalasca.pbs` does by executing `nano scalasca.pbs`
 ```bash showLineNumbers
-#SBATCH -J mzmpibt             # job name
-#SBATCH -o trace-C.8-%j.out    # stdout output file
-#SBATCH -e trace-C.8-%j.err    # stderr output file
-#SBATCH --nodes=2              # requested nodes
-#SBATCH --ntasks=8             # requested MPI tasks
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=6      # requested logical CPUs/threads per task
-#SBATCH --partition RM         # partition to use
-#SBATCH --account=tra210016p   # account to charge
-#SBATCH --export=ALL           # export env varibales
-#SBATCH --time=00:10:00        # max wallclock time (hh:mm:ss)
+#!/bin/bash
+# submit from ./bin subdirectory with "qsub reference.pbs"
+#
+#PBS -N mzmpibt
+#PBS -l select=2:node_type=skl:mem=10gb:mpiprocs=4:ncpus=20
+#PBS -l place=scatter
+#PBS -q smp
+#PBS -l walltime=00:10:00
 
-# setup modules, add tools to PATH
-set -x
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+cd $PBS_O_WORKDIR
 
-module use /jet/home/zhukov/ihpcss25/modules/
-module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
-
-# benchmark configuration
+# Benchmark configuration
 export NPB_MZ_BLOAD=0
-CLASS=C
-PROCS=$SLURM_NTASKS
-EXE=./bt-mz_$CLASS.$PROCS
+export OMP_NUM_THREADS=10
+CLASS=B
+NPROCS=8
+EXE=./bt-mz_$CLASS.$NPROCS
+
+module load score-p cube scalasca
 
 # Score-P measurement configuration
 # highlight-start
 export SCOREP_FILTERING_FILE=../config/scorep.filt
-export SCOREP_TOTAL_MEMORY=95MB
-#export SCAN_ANALYZE_OPTS="--time-correct"
+export SCOREP_TOTAL_MEMORY=59M
+export SCAN_ANALYZE_OPTS="--time-correct"
 # highlight-end
+#export SCOREP_METRIC_PAPI=PAPI_TOT_INS,PAPI_TOT_CYC
 
 # Run the application
 # highlight-next-line
-scalasca -analyze -t mpirun -n $SLURM_NTASKS $EXE
+scalasca -analyze -t mpirun --report-bindings $EXE
 ```
 In the first highlighted lines we set the measurement configuration, i.e. use the prepared filter file and set the required amount of memory for tracing based on scoring. And in the last highlighted line we enabled Scalasca trace analysis with the `-t` option.
 
 Now we are ready to submit our batch script
 ```bash
-sbatch scalasca.sbatch.C.8
+qsub scalasca.pbs
 ```
 
-After successful trace collection and analysis you should see freshly generated experiment directory `scorep_bt-mz_C_8x6_trace`. Let us examine what is inside this directory:
+After successful trace collection and analysis you should see freshly generated experiment directory `scorep_bt-mz_B_Ox10_trace`. Let us examine what is inside this directory:
 ```bash
-$ ls -1 scorep_bt-mz_C_8x6_trace
+$ ls -1 scorep_bt-mz_B_Ox10_trace
 MANIFEST.md
 profile.cubex
 scorep.cfg
 scorep.filter
 scorep.log
 scout.cubex
+scout.err
 scout.log
 traces
 traces.def
@@ -103,26 +100,38 @@ Among the already known files there are some new ones, e.g. a copy of the filter
 
 Let's examine `scout.log` if the trace analysis was successful:
 ```
-S=C=A=N: Thu Jun 16 07:40:59 2025: Analyze start
-/jet/packages/spack/opt/spack/linux-centos8-zen2/gcc-10.2.0/openmpi-4.0.5-i77nnmggpclrp6x53f7e5vpc4afn5p5c/bin/mpirun -n 8 /jet/home/zhukov/ihpcss25/tools/scalasca/2.6.1/gcc_openmpi/bin/scout.hyb ./scorep_bt-mz_C_8x6_trace/traces.otf2
-SCOUT   (Scalasca 2.6.1)
-Copyright (c) 1998-2022 Forschungszentrum Juelich GmbH
-Copyright (c) 2014-2021 RWTH Aachen University
+S=C=A=N: Wed Oct  8 19:27:54 2025: Analyze start
+/opt/hlrs/non-spack/mpi/openmpi/5.0.7-gcc-14.2.0/bin/mpirun --report-bindings /opt/training/non-spack/scalasca/2.6.2/bin/scout.hyb --time-correct ./scorep_bt-mz_B_Ox10_trace/traces.otf2
+SCOUT   (Scalasca 2.6.2)
+Copyright (c) 1998-2025 Forschungszentrum Juelich GmbH
+Copyright (c) 2014-2022 RWTH Aachen University
 Copyright (c) 2009-2014 German Research School for Simulation Sciences GmbH
 
-Analyzing experiment archive ./scorep_bt-mz_C_8x6_trace/traces.otf2
+Analyzing experiment archive ./scorep_bt-mz_B_Ox10_trace/traces.otf2
 
-Opening experiment archive ... done (0.007s).
-Reading definition data    ... done (0.003s).
-Reading event trace data   ... done (0.238s).
-Preprocessing              ... done (0.501s).
-Analyzing trace data       ... done (12.885s).
-Writing analysis report    ... done (0.125s).
+Opening experiment archive ... done (0.001s).
+Reading definition data    ... done (0.001s).
+Reading event trace data   ... done (0.338s).
+Preprocessing              ... done (6.120s).
+Timestamp correction       ... done (22.902s).
+Analyzing trace data       ... done (107.778s).
+Writing analysis report    ... done (0.369s).
 
-Max. memory usage         : 919.910MB
+Max. memory usage         : 534.453MB
 
-Total processing time     : 13.860s
-S=C=A=N: Thu Jun 16 07:41:14 2025: Analyze done (status=0) 15s
+	# passes        : 1
+	# violated      : 3
+	# corrected     : 3880
+	# reversed-p2p  : 0
+	# reversed-coll : 3
+	# reversed-omp  : 0
+	# events        : 17727710
+	max. error      : 0.000000 [s]
+	error at final. : 0.000000 [%]
+	Max slope       : 0.010000000
+
+Total processing time     : 137.582s
+S=C=A=N: Wed Oct  8 19:30:14 2025: Analyze done (status=0) 140s
 ```
 There are no errors or warnings, so the analysis was successful. 
 
@@ -141,7 +150,7 @@ Similar to the summary report, the trace analysis report can finally be postproc
 $ square scorep_bt-mz_C_8x6_trace/
 INFO: Post-processing runtime summarization report (profile.cubex)...
 INFO: Post-processing trace analysis report (scout.cubex)...
-INFO: Displaying ./scorep_bt-mz_C_8x6_trace/trace.cubex...
+INFO: Displaying ./scorep_bt-mz_B_Ox10_trace/trace.cubex...
 ```
 
 The report generated by the Scalasca trace analyzer (i.e. `trace.cubex`) is again a profile in CUBE4 format, however, enriched with additional performance properties, e.g. "Delay costs", "Critical path", etc. Examination shows that roughly half of the time spent in MPI point-to-point communication is waiting time, mainly in "Late Sender" wait state.
