@@ -8,7 +8,7 @@ In this part we are going to build and run a specific benchmark to identify how 
 
 ## Initial setup
 
-First of all let's login into Bridges-2 using ssh:
+First of all let's login into HLRS training cluster using ssh:
 
 ```bash
 $ ssh -Y userid@training.hlrs.de
