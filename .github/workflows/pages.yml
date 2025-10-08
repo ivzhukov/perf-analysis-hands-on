@@ -3,7 +3,7 @@ name: Deploy static page
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: [main]
+    branches: [hlrs_2025]
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
