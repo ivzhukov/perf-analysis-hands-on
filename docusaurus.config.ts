@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Parallel Programming Workshop (MPI, OpenMP and Advanced Topics)',
+  title: 'Parallel Programming Workshop (HLRS, 2025)',
   tagline: 'Performance Analysis Hands-On',
   favicon: 'img/logo.ico',
 
