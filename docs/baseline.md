@@ -11,30 +11,30 @@ In this part we are going to build and run a specific benchmark to identify how 
 First of all let's login into Bridges-2 using ssh:
 
 ```bash
-$ ssh -Y userid@bridges2.psc.edu
+$ ssh -Y userid@training.hlrs.de
 ```
 The **-Y** option is necessary to enable X11 forwarding. X11 forwarding is a SSH protocol that enables users to run graphical applications on a remote server and interact with them using their local display and I/O devices.
 
 Now we need to create our own directory for the exercises:
 
 ```bash
-$ mkdir -p $HOME/ihpcss25
+$ mkdir -p $HOME/performance_analysis
 ```
 The **-p** prevents error messages if the specified directories already exists.
 
 Then, we need to load required software, e.g. compiler, MPI, text editor:
 
 ```bash
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
+$ module load compiler/gcc/14.2.0 mpi/openmpi/5.0.7-gcc-14.2.0
 ```
 
 ## Build benchmark
 
 Start by copying the tutorial sources to your working directory:
 ```bash
-$ cd $HOME/ihpcss25
-$ tar xvf /jet/home/zhukov/ihpcss25/tutorial/NPB3.3-MZ-MPI.tar.gz
-$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI
+$ cd $HOME/performance_analysis
+$ tar xvf /zhome/training/sct50052/NPB3.3-MZ-MPI.tar.gz
+$ cd $HOME/performance_analysis/NPB3.3-MZ-MPI
 ```
 
 For this tutorial we are going to use the NAS Parallel Benchmark suite (MPI+OpenMP version). It is available [here](http://www.nas.nasa.gov/Software/NPB), and includes three benchmarks written in Fortran77. You can configure the benchmark for various sizes and classes. This allows the benchmark to be used on a wide range of systems, from workstations to supercomputers.
@@ -103,48 +103,48 @@ $ make
 To build application the following parameters need to be specified:
 * The benchmark configuration benchmark name (bt-mz, lu-mz, sp-mz): ```bt-mz```
 * The number of MPI processes: ```NPROCS=8```
-* The benchmark class (S, W, A, B, C, D, E): ```CLASS=C```
+* The benchmark class (S, W, A, B, C, D, E): ```CLASS=B```
 
 Alternatively, you can just use ```make suite```.
 
 ```bash
-$ make bt-mz CLASS=C NPROCS=8
+$ make bt-mz CLASS=B NPROCS=8
    ===========================================
    =      NAS PARALLEL BENCHMARKS 3.3        =
    =      MPI+OpenMP Multi-Zone Versions     =
    =      F77                                =
    ===========================================
 
-cd BT-MZ; make CLASS=C NPROCS=8 VERSION=
-make[1]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
+cd BT-MZ; make CLASS=B NPROCS=8 VERSION=
+make[1]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
-../sys/setparams bt-mz 8 C
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  bt.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  initialize.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exact_solution.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exact_rhs.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  set_constants.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  adi.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  rhs.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  zone_setup.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  x_solve.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  y_solve.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exch_qbc.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  solve_subs.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  z_solve.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  add.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  error.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  verify.f
-mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  mpi_setup.f
-cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  print_results.f
-cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  timers.f
-mpif77 -O3 -fopenmp	 -fallow-argument-mismatch  -o ../bin/bt-mz_C.8 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
-Built executable ../bin/bt-mz_C.8
-make[1]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/sys'
+../sys/setparams bt-mz 8 B
+make[2]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  bt.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  initialize.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  exact_solution.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  exact_rhs.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  set_constants.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  adi.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  rhs.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  zone_setup.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  x_solve.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  y_solve.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  exch_qbc.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  solve_subs.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  z_solve.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  add.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  error.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  verify.f
+mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  mpi_setup.f
+cd ../common; mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  print_results.f
+cd ../common; mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  timers.f
+mpif77 -O3 -fopenmp	 -w -fallow-argument-mismatch  -o ../bin/bt-mz_B.8 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
+make[2]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
+Built executable ../bin/bt-mz_B.8
+make[1]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
 ```
 If compilation succeeds, you can find in the ```bin``` directory.
 
@@ -152,74 +152,70 @@ If compilation succeeds, you can find in the ```bin``` directory.
 Lets go to the ```bin``` directory, copy a prepared batch script and examine what it does:
 ```bash
 $ cd bin
-$ cp ../jobscript/bridges2/reference.sbatch.C.8 .
-$ nano reference.sbatch.C.8
+$ cp ../jobscript/hlrs_training/reference.pbs .
+$ nano reference.pbs
 ```
 Here is what you should see in your batch script:
 ```bash
 #!/bin/bash
-#SBATCH -J mzmpibt           # job name
-#SBATCH -o ref-C.8-%j.out    # stdout output file
-#SBATCH -e ref-C.8-%j.err    # stderr output file
-#SBATCH --nodes=2            # requested nodes
-#SBATCH --ntasks=8           # requested MPI tasks
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=6    # requested logical CPUs/threads per task
-#SBATCH --partition RM       # partition to use
-#SBATCH --account=tra210016p # account to charge
-#SBATCH --export=ALL         # export env varibales
-#SBATCH --time=00:10:00      # max wallclock time (hh:mm:ss)
+# submit from ./bin subdirectory with "qsub reference.pbs"
+#
+#PBS -N mzmpibt
+#PBS -l select=2:node_type=skl:mem=10gb:mpiprocs=4:ncpus=20
+#PBS -q smp
+#PBS -l place=scatter
+#PBS -l walltime=00:10:00
 
-# setup modules, add tools to PATH
-set -x
-module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
+cd $PBS_O_WORKDIR
 
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-
-# benchmark configuration
+# Benchmark configuration
 export NPB_MZ_BLOAD=0
-CLASS=C
-PROCS=$SLURM_NTASKS
-EXE=./bt-mz_$CLASS.$PROCS
+export OMP_NUM_THREADS=10
+CLASS=B
+NPROCS=8
+EXE=./bt-mz_$CLASS.$NPROCS
 
-mpirun -n $SLURM_NTASKS $EXE
+module load compiler/gcc/14.2.0 mpi/openmpi/5.0.7-gcc-14.2.0
+
+# Run the application
+mpirun --report-bindings $EXE
 ```
 To exit text editor you can use ```Ctrl+X```
 
-On Bridges-2 we are going to use RM partition:
-* 2 standard compute nodes with 2 x AMD EPYC 7742 CPUs, 64 cores per CPU, 128 cores per node
-* 250GB RAM per node
-* Our application will use 8 MPI ranks in total, 4 MPI ranks per node and 6 OpenMP threads per MPI rank
+On HLRS training cluster we are going to use skl partition:
+* 2 compute nodes with 2 x Intel Xeon Gold 6138 @ 2.0GHz Skylake, 40 cores per node
+* 10GB RAM per node
+* Our application will use 8 MPI ranks in total, 4 MPI ranks per node and 10 OpenMP threads per MPI rank
 
 Now we are ready to submit our batch script:
 ```bash
-$ sbatch reference.sbatch.C.8
+$ qsub reference.pbs
 ```
 
 :::info
 
-To submit the job use ```sbatch <script you want to submit>```.
+To submit the job use ```qsub <script you want to submit>```.
 
-To check status of all your jobs use ```squeue --me```.
+To check status of all your jobs use ```qstat -u $USER```.
 
-To cancel specific job use ```scancel <jobid you want to cancel>```.
+To cancel specific job use ```qdel <jobid you want to cancel>```.
 
 :::
 
-Once the job has finished you will see two files in your directory, one with standard output ```ref-C.8-<jobid>.out``` and one with standard error output ```ref-C.8-<jobid>.err```. The former one should include all output provided by your application and the latter one only system specific output. Let's examine standard output file:
+Once the job has finished you will see two files in your directory, one with standard output ```mzmpibt.o<jobid>``` and one with standard error output ```mzmpibt.e<jobid>```. The former one should include all output provided by your application and the latter one only system specific output. Let's examine standard output file:
 
  ```
- $ cat ref-C.8-<jobid>.out
+ $ cat mzmpibt.o<jobid>
  NAS Parallel Benchmarks (NPB3.3-MZ-MPI) - BT-MZ MPI+OpenMP Benchmark
 
- Number of zones:  16 x  16
- Iterations: 200    dt:   0.000100
+ Number of zones:   8 x   8
+ Iterations: 200    dt:   0.000300
  Number of active processes:     8
 
  Use the default load factors with threads
- Total number of threads:     48  (  6.0 threads/process)
+ Total number of threads:     80  ( 10.0 threads/process)
 
- Calculated speedup =     47.97
+ Calculated speedup =     78.79
 
  Time step    1
  Time step   20
@@ -232,36 +228,36 @@ Once the job has finished you will see two files in your directory, one with sta
  Time step  160
  Time step  180
  Time step  200
- Verification being performed for class C
+ Verification being performed for class B
  accuracy setting for epsilon =  0.1000000000000E-07
  Comparison of RMS-norms of residual
-           1 0.3457703287806E+07 0.3457703287806E+07 0.1092202750127E-12
-           2 0.3213621375929E+06 0.3213621375929E+06 0.1322233937859E-12
-           3 0.7002579656870E+06 0.7002579656870E+06 0.1496217033982E-13
-           4 0.4517459627471E+06 0.4517459627471E+06 0.2254882500313E-13
-           5 0.2818715870791E+07 0.2818715870791E+07 0.1486830094937E-14
+           1 0.4461388343844E+06 0.4461388343844E+06 0.3261745920067E-14
+           2 0.3799759138035E+05 0.3799759138035E+05 0.1007209553561E-12
+           3 0.8383296623970E+05 0.8383296623970E+05 0.3506361528143E-13
+           4 0.5301970201273E+05 0.5301970201273E+05 0.5928388070858E-13
+           5 0.3618106851311E+06 0.3618106851311E+06 0.2863642249494E-13
  Comparison of RMS-norms of solution error
-           1 0.2059106993570E+06 0.2059106993570E+06 0.1539214400532E-12
-           2 0.1680761129461E+05 0.1680761129461E+05 0.2132015705369E-12
-           3 0.4080731640795E+05 0.4080731640795E+05 0.3084595553087E-13
-           4 0.2836541076778E+05 0.2836541076778E+05 0.1026032398931E-12
-           5 0.2136807610771E+06 0.2136807610771E+06 0.2334508972703E-12
+           1 0.4496733567600E+05 0.4496733567600E+05 0.8430061198873E-13
+           2 0.3892068540524E+04 0.3892068540524E+04 0.7325836789283E-13
+           3 0.8763825844217E+04 0.8763825844217E+04 0.4981357053542E-13
+           4 0.5599040091792E+04 0.5599040091792E+04 0.8154368120338E-13
+           5 0.4082652045598E+05 0.4082652045598E+05 0.6326684038186E-13
  Verification Successful
 
 
  BT-MZ Benchmark Completed.
- Class           =                        C
- Size            =            480x  320x 28
+ Class           =                        B
+ Size            =            304x  208x 17
  Iterations      =                      200
- Time in seconds =                    14.35
+ Time in seconds =                    23.09
  Total processes =                        8
- Total threads   =                       48
- Mop/s total     =                169157.12
- Mop/s/thread    =                  3524.11
+ Total threads   =                       80
+ Mop/s total     =                 26041.43
+ Mop/s/thread    =                   325.52
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1
- Compile date    =              16 Jun 2025
+ Compile date    =              08 Oct 2025
  ```
 
 The most important metric in the output is "Time in seconds" which indicates how much time the application spent executing 200 iterations (pre and post. processing are excluded from the time measurement). Further, "Validation" is important as it indicates if the computation completed successfully (e.g. converged). Please write down the time value you received, as we are going to refer to its value in the next section.
