@@ -17,7 +17,7 @@ const config: Config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'ivzhukov', // Usually your GitHub org/user name.
   projectName: 'perf-analysis-hands-on', // Usually your repo name.
-  deploymentBranch: "hlrs_2025",
+  deploymentBranch: "gh-pages",
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
