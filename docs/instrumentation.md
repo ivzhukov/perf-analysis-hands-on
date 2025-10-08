@@ -10,17 +10,16 @@ sidebar_position: 2
  To use Score-P, we first need to make sure that all required software is available:
 ```bash
 $ # Reload modules if needed
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 
+$ module load compiler/gcc/14.2.0 mpi/openmpi/5.0.7-gcc-14.2.0
 $ # Load additional software being used in the following steps
-$ module use /jet/home/zhukov/ihpcss25/modules/
-$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ module load score-p cube scalasca
 ```
 
 We loaded Scalasca trace tools at this stage as well to use convenience commands that allow to control execution measurement collection and analysis, and analysis report postprocessing. This is not necessary but highly recommended step to do.
 
 Go to our work directory
 ```bash
-$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI
+$ cd $HOME/performance_analysis/NPB3.3-MZ-MPI
 ```
 
 Edit `config/make.def` to adjust build (see highlighted lines)
@@ -78,7 +77,7 @@ FLINK   = $(MPIF77)
 #---------------------------------------------------------------------------
 # Global *compile time* flags for Fortran programs
 #---------------------------------------------------------------------------
-FFLAGS  = -O3 $(OPENMP) -fallow-argument-mismatch # GCC
+FFLAGS  = -O3 $(OPENMP) -w -fallow-argument-mismatch # GCC
 #FFLAGS  = -O3 $(OPENMP) # Intel
 
 #---------------------------------------------------------------------------
@@ -142,7 +141,7 @@ The `scorep` instrumenter must be used with the link command to ensure that all 
 
 Lets return to our root directory and clean-up:
 ```bash
-$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI/
+$ cd $HOME/performance_analysis/NPB3.3-MZ-MPI/
 $ make clean
 ```
 
@@ -156,78 +155,76 @@ $ make bt-mz CLASS=C NPROCS=8
    ===========================================
 
 cd BT-MZ; make CLASS=C NPROCS=8 VERSION=
-make[1]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
+make[1]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
+make[2]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/sys'
 ../sys/setparams bt-mz 8 C
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 bt.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 initialize.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 exact_solution.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 exact_rhs.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 set_constants.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 adi.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 rhs.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 zone_setup.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 x_solve.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 y_solve.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 exch_qbc.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 solve_subs.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 z_solve.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 add.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 error.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 verify.f
-scorep --user  mpif77 -c  -O3 -g -qopenmp	 mpi_setup.f
-cd ../common; scorep --user  mpif77 -c  -O3 -g -qopenmp	 print_results.f
-cd ../common; scorep --user  mpif77 -c  -O3 -g -qopenmp	 timers.f
-scorep --user  mpif77 -O3 -g -qopenmp	 -o ../bin.scorep/bt-mz_C.28 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o 
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  bt.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  initialize.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  exact_solution.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  exact_rhs.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  set_constants.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  adi.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  rhs.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  zone_setup.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  x_solve.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  y_solve.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  exch_qbc.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  solve_subs.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  z_solve.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  add.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  error.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  verify.f
+scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  mpi_setup.f
+cd ../common; scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  print_results.f
+cd ../common; scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  timers.f
+scorep --user mpif77 -O3 -fopenmp	 -w -fallow-argument-mismatch  -o ../bin.scorep/bt-mz_C.8 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
+make[2]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
 Built executable ../bin.scorep/bt-mz_C.8
-make[1]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[1]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
 ```
 As you might noticed now `scorep` stands before each compilation and linking command. This time executable was created in `bin.scorep` directory that allow us not to mess up with our baseline experiments.
 
 Let's go to the directory where our new executable lies and copy batch script
 ```bash
 $ cd bin.scorep
-$ cp ../jobscript/bridges2/scorep.sbatch.C.8 .
+$ cp ../jobscript/hlrs_training/scorep.pbs .
 ```
 
-Let's examine what `scorep.sbatch.C.8` does by executing `nano scorep.sbatch.C.8`
+Let's examine what `scorep.pbs` does by executing `nano scorep.pbs`
 ```bash showLineNumbers
 #!/bin/bash
-#SBATCH -J mzmpibt             # job name
-#SBATCH -o profile-C.8-%j.out  # stdout output file
-#SBATCH -e profile-C.8-%j.err  # stderr output file
-#SBATCH --nodes=2              # requested nodes
-#SBATCH --ntasks=8             # requested MPI tasks
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=6      # requested logical CPUs/threads per task
-#SBATCH --partition RM         # partition to use
-#SBATCH --account=tra210016p   # account to charge
-#SBATCH --export=ALL           # export env varibales
-#SBATCH --time=00:10:00        # max wallclock time (hh:mm:ss)
+# submit from ./bin subdirectory with "qsub reference.pbs"
+#
+#PBS -N mzmpibt
+#PBS -l select=2:node_type=skl:mem=10gb:mpiprocs=4:ncpus=20
+#PBS -l place=scatter
+#PBS -q smp
+#PBS -l walltime=00:10:00
 
-# setup modules, add tools to PATH
-set -x
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+cd $PBS_O_WORKDIR
 
-module use /jet/home/zhukov/ihpcss25/modules/
-module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
-
-# benchmark configuration
+# Benchmark configuration
 export NPB_MZ_BLOAD=0
-CLASS=C
-PROCS=$SLURM_NTASKS
-EXE=./bt-mz_$CLASS.$PROCS
+export OMP_NUM_THREADS=10
+CLASS=B
+NPROCS=8
+EXE=./bt-mz_$CLASS.$NPROCS
+
+module load score-p cube scalasca
 
 # Score-P measurement configuration
 # highlight-next-line
-export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_${CLASS}_${PROCS}x${OMP_NUM_THREADS}_sum
+export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_sum
 #export SCOREP_FILTERING_FILE=../config/scorep.filt
+#export SCOREP_METRIC_PAPI=PAPI_TOT_INS,PAPI_TOT_CYC
+#export SCOREP_TOTAL_MEMORY=90M
+#export SCOREP_ENABLE_TRACING=true
 
-mpirun -n $SLURM_NTASKS $EXE
+# Run the application
+mpirun --report-bindings $EXE
 ```
 In highlighted line we set name of the directory where we store measurements. This is not required, but helps identifying the measurement later on.
 
@@ -239,24 +236,23 @@ Score-P measurements are configured via environment variables with the prefix `S
 
 Now we are ready to submit our batch script:
 ```bash
-sbatch scorep.sbatch.C.8
+qsub scorep.pbs
 ```
 
 Once your job complete check what is new in the execution directory
 ```bash
 $ ls -l
-bt-mz_C.8
-profile-C.8-<jobid>.err
-profile-C.8-<jobid>.out
-scorep_bt-mz_C_8x6_sum
-scorep.sbatch.C.8
+-rwx------ 1 sct50052 students 219520 Oct  8 17:59 bt-mz_B.8
+-rw------- 1 sct50052 students   5836 Oct  8 18:43 mzmpibt.e22121
+-rw------- 1 sct50052 students   1971 Oct  8 18:44 mzmpibt.o22121
+drwxr-xr-x 2 sct50052 students      5 Oct  8 18:44 scorep_bt-mz_sum
 ```
 
-What we see new there? `profile-C.8-<jobid>.err` includes stderr output, `profile-C.8-<jobid>.out` includes stdout output, and `scorep_bt-mz_C_8x6_sum` includes the measurement results collected by our instrumented application.
+What we see new there? `mzmpibt.e<jobid>` includes stderr output, `mzmpibt.o<jobid>` includes stdout output, and `scorep_bt-mz_sum` includes the measurement results collected by our instrumented application.
 
 Let's examine what is inside measurement directory:
 ```bash
-$ ls -1 scorep_bt-mz_C_8x6_sum/
+$ ls -1 scorep_bt-mz_sum/
 MANIFEST.md
 profile.cubex
 scorep.cfg
