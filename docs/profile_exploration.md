@@ -5,12 +5,12 @@ sidebar_position: 4
 
 Congratulations, now we collected our first measurements with acceptable runtime dilation. This new measurement should accurately represent the real runtime behavior of the BT-MZ application, and can now be postprocessed and interactively explored using the Cube browser. These two steps can be conveniently initiated using the following command:
 ```bash
-$ # Load modules if not loaded already
-$ module load load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 
-$ module use /jet/home/zhukov/ihpcss25/modules/
-$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ # Reload modules if needed
+$ module load compiler/gcc/14.2.0 mpi/openmpi/5.0.7-gcc-14.2.0
+$ # Load additional software being used in the following steps
+$ module load score-p cube scalasca
 $ # execute postprocessing
-$ square scorep_bt-mz_C_8x6_sum_filt
+$ square scorep_bt-mz_sum_filt
 ```
 
 This command will post-process a `profile.cubex` and create a summary report `summary.cubex`, then open the CUBE browser.
@@ -21,22 +21,22 @@ Exploring profiles via the CUBE over SSH can be very slow due to the high data t
 
 You can copy prepared profiles and traces from [here](https://fz-juelich.sciebo.de/s/qBq6OrhJImHulbr) or from Bridges-2 via the following command executed on you local machine  
 ```bash
-$ # go to the directory were you want to store measurements
+$ # go to the directory were you want to store measurements (on your laptop!)
 $ cd <my_directory>
-$ # copy files from Bridges-2 to your current directory 
-$ scp userid@bridges2.psc.edu:/jet/home/zhukov/ihpcss25/tutorial/measurements_bridges2.tar.gz .
+$ # copy files from HLRS training cluster to your current directory 
+$ scp userid@training.hlrs.de:/zhome/training/sct50052/measurements_hlrs_training.tar.gz .
 $ # untar experiments
-$ tar xvf measurements_bridges2.tar.gz
+$ tar xvf measurements_hlrs_training.tar.gz
 ```
 
 Go to the directory where experiments are stored 
 ```bash
-$ cd measurements_bridges2/bin.scorep/
+$ cd measurements_hlrs_training/bin.scorep/
 ```
 
 Open collected traces with CUBE
 ```bash
-$ cube scorep_bt-mz_C_8x6_sum_filt/summary.cubex
+$ cube scorep_bt-mz_sum_filt/summary.cubex
 ```
 
 :::
