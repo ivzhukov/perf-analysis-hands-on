@@ -138,7 +138,7 @@ const config: Config = {
           items: [
             {
               label: 'Slides',
-              href: 'https://fz-juelich.sciebo.de/s/mOgI7G6gIfS4RnY',
+              href: 'https://fz-juelich.sciebo.de/s/3WB75CXnAk9o4Ag',
             },
             {
               label: 'Download NPB3.3-MZ-MPI benchmark',
