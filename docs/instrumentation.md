@@ -147,19 +147,19 @@ $ make clean
 
 Next, we build the instrumented version of BT-MZ:
 ```bash
-$ make bt-mz CLASS=C NPROCS=8
+$ make bt-mz CLASS=B NPROCS=8
    ===========================================
    =      NAS PARALLEL BENCHMARKS 3.3        =
    =      MPI+OpenMP Multi-Zone Versions     =
    =      F77                                =
    ===========================================
 
-cd BT-MZ; make CLASS=C NPROCS=8 VERSION=
+cd BT-MZ; make CLASS=B NPROCS=8 VERSION=
 make[1]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
 make[2]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
 make[2]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/sys'
-../sys/setparams bt-mz 8 C
+../sys/setparams bt-mz 8 B
 make[2]: Entering directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
 scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  bt.f
 scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  initialize.f
@@ -182,7 +182,7 @@ cd ../common; scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatc
 cd ../common; scorep --user mpif77 -c  -O3 -fopenmp	 -w -fallow-argument-mismatch  timers.f
 scorep --user mpif77 -O3 -fopenmp	 -w -fallow-argument-mismatch  -o ../bin.scorep/bt-mz_C.8 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
 make[2]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
-Built executable ../bin.scorep/bt-mz_C.8
+Built executable ../bin.scorep/bt-mz_B.8
 make[1]: Leaving directory '/zhome/training/sct50052/performance_analysis/NPB3.3-MZ-MPI/BT-MZ'
 ```
 As you might noticed now `scorep` stands before each compilation and linking command. This time executable was created in `bin.scorep` directory that allow us not to mess up with our baseline experiments.
