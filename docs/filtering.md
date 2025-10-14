@@ -429,7 +429,7 @@ If a directory with the specified name already exists, it will be renamed with a
 
 Now we are ready to submit our batch script with enabled filtering
 ```bash
-$ sbatch scorep.pbs
+$ pbs scorep.pbs
 ```
 
 :::tip[Question]
