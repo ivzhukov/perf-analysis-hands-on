@@ -377,7 +377,7 @@ Below the (original) function group summary, the score report now also includes 
 
 As expected, the estimate for the aggregate event trace size drops down to 273MB, and the process-local maximum across all ranks is reduced to 39MB. Since the Score-P measurement system also creates a number of internal data structures (e.g., to track MPI requests and communicators), the suggested setting for the `SCOREP_TOTAL_MEMORY` environment variable to adjust the maximum amount of memory used by the Score-P memory management is 59MB when tracing is configured.
 
-:::
+:::info
 
 With the `-g` option, `scorep-score` can create an initial filter file in Score-P format. See more details [here](https://perftools.pages.jsc.fz-juelich.de/cicd/scorep/tags/latest/html/score.html). 
 
