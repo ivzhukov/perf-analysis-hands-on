@@ -407,7 +407,7 @@ module load score-p cube scalasca
 
 # Score-P measurement configuration
 # highlight-start
-export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_sum_sum
+export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_sum_sum_filt
 export SCOREP_FILTERING_FILE=../config/scorep.filt
 # highlight-end
 #export SCOREP_METRIC_PAPI=PAPI_TOT_INS,PAPI_TOT_CYC
