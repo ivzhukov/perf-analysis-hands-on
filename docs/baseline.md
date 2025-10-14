@@ -8,10 +8,10 @@ In this part we are going to build and run a specific benchmark to identify how 
 
 ## Initial setup
 
-First of all let's login into HLRS training cluster using ssh:
+First of all let's login into HLRS training cluster using ssh on your laptop:
 
 ```bash
-$ ssh -Y userid@training.hlrs.de
+$ ssh -Y training.hlrs.de
 ```
 The **-Y** option is necessary to enable X11 forwarding. X11 forwarding is a SSH protocol that enables users to run graphical applications on a remote server and interact with them using their local display and I/O devices.
 
