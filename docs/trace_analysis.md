@@ -77,7 +77,7 @@ In the first highlighted lines we set the measurement configuration, i.e. use th
 
 Now we are ready to submit our batch script
 ```bash
-qsub scalasca.pbs
+$ qsub scalasca.pbs
 ```
 
 After successful trace collection and analysis you should see freshly generated experiment directory `scorep_bt-mz_B_Ox10_trace`. Let us examine what is inside this directory:
