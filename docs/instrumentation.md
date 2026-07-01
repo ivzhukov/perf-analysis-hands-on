@@ -9,18 +9,18 @@ sidebar_position: 2
 
  To use Score-P, we first need to make sure that all required software is available:
 ```bash
-$ # Reload modules if needed
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 
+$ # Reload modules if needed 
+$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
 $ # Load additional software being used in the following steps
-$ module use /jet/home/zhukov/ihpcss25/modules/
-$ module load scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+$ module use /jet/home/zhukov/ihpcss26/modules/
+$ module load scorep/10.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
 ```
 
 We loaded Scalasca trace tools at this stage as well to use convenience commands that allow to control execution measurement collection and analysis, and analysis report postprocessing. This is not necessary but highly recommended step to do.
 
 Go to our work directory
 ```bash
-$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI
+$ cd $HOME/ihpcss26/NPB3.3-MZ-MPI
 ```
 
 Edit `config/make.def` to adjust build (see highlighted lines)
@@ -142,7 +142,7 @@ The `scorep` instrumenter must be used with the link command to ensure that all 
 
 Lets return to our root directory and clean-up:
 ```bash
-$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI/
+$ cd $HOME/ihpcss26/NPB3.3-MZ-MPI/
 $ make clean
 ```
 
@@ -156,12 +156,12 @@ $ make bt-mz CLASS=C NPROCS=8
    ===========================================
 
 cd BT-MZ; make CLASS=C NPROCS=8 VERSION=
-make[1]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
+make[1]: Entering directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/sys'
 ../sys/setparams bt-mz 8 C
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
 scorep --user  mpif77 -c  -O3 -g -qopenmp	 bt.f
 scorep --user  mpif77 -c  -O3 -g -qopenmp	 initialize.f
 scorep --user  mpif77 -c  -O3 -g -qopenmp	 exact_solution.f
@@ -182,9 +182,9 @@ scorep --user  mpif77 -c  -O3 -g -qopenmp	 mpi_setup.f
 cd ../common; scorep --user  mpif77 -c  -O3 -g -qopenmp	 print_results.f
 cd ../common; scorep --user  mpif77 -c  -O3 -g -qopenmp	 timers.f
 scorep --user  mpif77 -O3 -g -qopenmp	 -o ../bin.scorep/bt-mz_C.28 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o 
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
 Built executable ../bin.scorep/bt-mz_C.8
-make[1]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[1]: Leaving directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
 ```
 As you might noticed now `scorep` stands before each compilation and linking command. This time executable was created in `bin.scorep` directory that allow us not to mess up with our baseline experiments.
 
@@ -213,8 +213,8 @@ Let's examine what `scorep.sbatch.C.8` does by executing `nano scorep.sbatch.C.8
 set -x
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-module use /jet/home/zhukov/ihpcss25/modules/
-module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0 scorep/8.4-gcc_openmpi scalasca/2.6-gcc_openmpi
+module use /jet/home/zhukov/ihpcss26/modules/
+module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1 scorep/10.0-gcc_openmpi scalasca/2.6.2-gcc_openmpi
 
 # benchmark configuration
 export NPB_MZ_BLOAD=0
@@ -227,7 +227,7 @@ EXE=./bt-mz_$CLASS.$PROCS
 export SCOREP_EXPERIMENT_DIRECTORY=scorep_bt-mz_${CLASS}_${PROCS}x${OMP_NUM_THREADS}_sum
 #export SCOREP_FILTERING_FILE=../config/scorep.filt
 
-mpirun -n $SLURM_NTASKS $EXE
+mpirun -n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK $EXE
 ```
 In highlighted line we set name of the directory where we store measurements. This is not required, but helps identifying the measurement later on.
 
