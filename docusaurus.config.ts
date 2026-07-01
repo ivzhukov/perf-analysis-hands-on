@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'IHPCSS25',
+  title: 'IHPCSS26',
   tagline: 'Performance Analysis Hands-On',
   favicon: 'img/logo.ico',
 
