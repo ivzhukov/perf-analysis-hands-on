@@ -11,30 +11,30 @@ In this part we are going to build and run a specific benchmark to identify how 
 First of all let's login into Bridges-2 using ssh:
 
 ```bash
-$ ssh -Y userid@bridges2.psc.edu
+$ ssh -X userid@bridges2.psc.edu
 ```
-The **-Y** option is necessary to enable X11 forwarding. X11 forwarding is a SSH protocol that enables users to run graphical applications on a remote server and interact with them using their local display and I/O devices.
+The **-X** option is necessary to enable X11 forwarding. X11 forwarding is a SSH protocol that enables users to run graphical applications on a remote server and interact with them using their local display and I/O devices.
 
 Now we need to create our own directory for the exercises:
 
 ```bash
-$ mkdir -p $HOME/ihpcss25
+$ mkdir -p $HOME/ihpcss26
 ```
 The **-p** prevents error messages if the specified directories already exists.
 
 Then, we need to load required software, e.g. compiler, MPI, text editor:
 
 ```bash
-$ module load gcc/10.2.0 openmpi/4.0.5-gcc10.2.0
+$ module load gcc/13.3.1-p20240614 openmpi/5.0.8-gcc13.3.1
 ```
 
 ## Build benchmark
 
 Start by copying the tutorial sources to your working directory:
 ```bash
-$ cd $HOME/ihpcss25
-$ tar xvf /jet/home/zhukov/ihpcss25/tutorial/NPB3.3-MZ-MPI.tar.gz
-$ cd $HOME/ihpcss25/NPB3.3-MZ-MPI
+$ cd $HOME/ihpcss26
+$ tar xvf /jet/home/zhukov/ihpcss26/tutorial/NPB3.3-MZ-MPI.tar.gz
+$ cd $HOME/ihpcss26/NPB3.3-MZ-MPI
 ```
 
 For this tutorial we are going to use the NAS Parallel Benchmark suite (MPI+OpenMP version). It is available [here](http://www.nas.nasa.gov/Software/NPB), and includes three benchmarks written in Fortran77. You can configure the benchmark for various sizes and classes. This allows the benchmark to be used on a wide range of systems, from workstations to supercomputers.
@@ -116,12 +116,12 @@ $ make bt-mz CLASS=C NPROCS=8
    ===========================================
 
 cd BT-MZ; make CLASS=C NPROCS=8 VERSION=
-make[1]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
+make[1]: Entering directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/sys'
 cc  -o setparams setparams.c -lm
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/sys'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/sys'
 ../sys/setparams bt-mz 8 C
-make[2]: Entering directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Entering directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
 mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  bt.f
 mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  initialize.f
 mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  exact_solution.f
@@ -142,9 +142,9 @@ mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  mpi_setup.f
 cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  print_results.f
 cd ../common; mpif77 -c  -O3 -fopenmp	 -fallow-argument-mismatch  timers.f
 mpif77 -O3 -fopenmp	 -fallow-argument-mismatch  -o ../bin/bt-mz_C.8 bt.o  initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o  rhs.o zone_setup.o x_solve.o y_solve.o  exch_qbc.o solve_subs.o z_solve.o add.o error.o verify.o mpi_setup.o ../common/print_results.o ../common/timers.o
-make[2]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[2]: Leaving directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
 Built executable ../bin/bt-mz_C.8
-make[1]: Leaving directory '/jet/home/zhukov/ihpcss25/NPB3.3-MZ-MPI/BT-MZ'
+make[1]: Leaving directory '/jet/home/zhukov/ihpcss26/NPB3.3-MZ-MPI/BT-MZ'
 ```
 If compilation succeeds, you can find in the ```bin``` directory.
 
@@ -182,7 +182,7 @@ CLASS=C
 PROCS=$SLURM_NTASKS
 EXE=./bt-mz_$CLASS.$PROCS
 
-mpirun -n $SLURM_NTASKS $EXE
+mpirun -n $SLURM_NTASKS --cpus-per-rank $SLURM_CPUS_PER_TASK $EXE
 ```
 To exit text editor you can use ```Ctrl+X```
 
@@ -261,7 +261,7 @@ Once the job has finished you will see two files in your directory, one with sta
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1
- Compile date    =              16 Jun 2025
+ Compile date    =              16 Jun 2026
  ```
 
 The most important metric in the output is "Time in seconds" which indicates how much time the application spent executing 200 iterations (pre and post. processing are excluded from the time measurement). Further, "Validation" is important as it indicates if the computation completed successfully (e.g. converged). Please write down the time value you received, as we are going to refer to its value in the next section.
