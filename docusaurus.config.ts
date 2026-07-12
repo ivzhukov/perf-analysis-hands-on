@@ -142,11 +142,11 @@ const config: Config = {
             },
             {
               label: 'Download NPB3.3-MZ-MPI benchmark',
-              href: 'https://fz-juelich.sciebo.de/s/4QBRlodmI2Zd1jH',
+              href: 'https://fz-juelich.sciebo.de/s/L9TA6qRR9E9P2af',
             },
             {
               label: 'Bridges-2 measurements',
-              href: 'https://fz-juelich.sciebo.de/s/oAznxYjPUWSIFAf',
+              href: 'https://fz-juelich.sciebo.de/s/8GTAd8qPg2ZTJmW',
             },
           ],
         },       
